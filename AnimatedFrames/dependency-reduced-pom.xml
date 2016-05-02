@@ -67,6 +67,10 @@
                   <shadedPattern>org.inventivetalent.animatedframes.boundingbox</shadedPattern>
                 </relocation>
                 <relocation>
+                  <pattern>org.inventivetalent.update.spiget</pattern>
+                  <shadedPattern>org.inventivetalent.animatedframes.update</shadedPattern>
+                </relocation>
+                <relocation>
                   <pattern>com.google.gson</pattern>
                   <shadedPattern>org.inventivetalent.animatedframes.gson</shadedPattern>
                 </relocation>

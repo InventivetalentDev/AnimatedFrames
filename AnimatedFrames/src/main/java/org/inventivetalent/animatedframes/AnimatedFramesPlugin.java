@@ -34,6 +34,7 @@ import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.config.ConfigValue;
 import org.inventivetalent.update.spiget.SpigetUpdate;
 import org.inventivetalent.update.spiget.UpdateCallback;
+import org.inventivetalent.update.spiget.comparator.VersionComparator;
 import org.mcstats.MetricsLite;
 
 import java.util.concurrent.Executor;
@@ -94,12 +95,12 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 				getLogger().info("Metrics started");
 			}
 
-			spigetUpdate = new SpigetUpdate(this, 5583).setUserAgent("AnimatedFrames/" + getDescription().getVersion());
+			spigetUpdate = new SpigetUpdate(this, 5583).setUserAgent("AnimatedFrames/" + getDescription().getVersion()).setVersionComparator(VersionComparator.SEM_VER);
 			spigetUpdate.checkForUpdate(new UpdateCallback() {
 				@Override
 				public void updateAvailable(String s, String s1, boolean b) {
 					getLogger().info("A new version is available (" + s + "). Download it from https://r.spiget.org/5583");
-					getLogger().info("(If the above version is lower than the installed version, you are probably up-to-date)");
+//					getLogger().info("(If the above version is lower than the installed version, you are probably up-to-date)");
 				}
 
 				@Override
