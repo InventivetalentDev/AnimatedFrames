@@ -52,6 +52,17 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		if (!Bukkit.getPluginManager().isPluginEnabled("MapManager")) {
+			getLogger().warning("**************************************************");
+			getLogger().warning("  ");
+			getLogger().warning("         This plugin depends on MapManager        ");
+			getLogger().warning("             https://r.spiget.org/19198            ");
+			getLogger().warning("  ");
+			getLogger().warning("**************************************************");
+			Bukkit.getPluginManager().disablePlugin(this);
+			return;
+		}
+
 		saveDefaultConfig();
 		PluginAnnotations.CONFIG.load(this, this);
 		PluginAnnotations.COMMAND.load(this, new Commands(this));
