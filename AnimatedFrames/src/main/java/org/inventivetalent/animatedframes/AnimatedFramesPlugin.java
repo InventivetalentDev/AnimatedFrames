@@ -31,7 +31,6 @@ package org.inventivetalent.animatedframes;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
-import org.inventivetalent.pluginannotations.config.ConfigValue;
 import org.inventivetalent.update.spiget.SpigetUpdate;
 import org.inventivetalent.update.spiget.UpdateCallback;
 import org.inventivetalent.update.spiget.comparator.VersionComparator;
@@ -48,8 +47,6 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 	public InteractListener interactListener;
 
 	SpigetUpdate spigetUpdate;
-
-	@ConfigValue(path = "executor.threads") public int executorThreads = 1;
 
 	@Override
 	public void onEnable() {
@@ -100,7 +97,7 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 				@Override
 				public void updateAvailable(String s, String s1, boolean b) {
 					getLogger().info("A new version is available (" + s + "). Download it from https://r.spiget.org/5583");
-//					getLogger().info("(If the above version is lower than the installed version, you are probably up-to-date)");
+					//					getLogger().info("(If the above version is lower than the installed version, you are probably up-to-date)");
 				}
 
 				@Override
