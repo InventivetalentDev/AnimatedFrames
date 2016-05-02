@@ -135,7 +135,7 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 					BufferedImage image = ImageIO.read(file);
 					image = scaleImage(image);
 					MapWrapper mapWrapper = mapManager.wrapMultiImage(image, this.height, this.width);
-					this.frameDelays = new int[] { 2000 };
+					this.frameDelays = new int[] { 500 };
 					this.mapWrappers = new MapWrapper[] { mapWrapper };
 					image.flush();
 				} else {
@@ -247,6 +247,10 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 	public void addViewer(Player player) {
 		if (this.mapWrappers != null) {
 			for (MapWrapper wrapper : mapWrappers) {
+				if (wrapper == null) {
+					plugin.getLogger().warning("Null-element in MapWrapper array of " + getName());
+					continue;
+				}
 				MapController controller = wrapper.getController();
 				controller.addViewer(player);
 				controller.sendContent(player);
@@ -258,12 +262,22 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 	}
 
 	public void removeViewer(OfflinePlayer player) {
+		boolean empty;
 		synchronized (this.worldPlayersLock) {
 			this.worldPlayers.remove(player.getUniqueId());
+			empty = this.worldPlayers.isEmpty();
 		}
 		for (MapWrapper wrapper : mapWrappers) {
+			if (wrapper == null) {
+				plugin.getLogger().warning("Null-element in MapWrapper array of " + getName());
+				continue;
+			}
 			MapController controller = wrapper.getController();
-			controller.removeViewer(player);
+			if (empty) {
+				controller.clearViewers();
+			} else {
+				controller.removeViewer(player);
+			}
 		}
 	}
 
@@ -284,7 +298,6 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 
 					Vector2DDouble startVector = minCorner2d;
 
-					//										if (!imageLoaded) { BoundingBoxAPI.drawParticleOutline(boundingBox, getWorld(), ParticleEffect.REDSTONE).run(); }
 					for (Entity entity : world.getNearbyEntities(baseVector.toBukkitLocation(world), width, height, width)) {
 						if (entity instanceof ItemFrame) {
 							if (boundingBox.expand(0.1).contains(new Vector3DDouble(entity.getLocation()))) {

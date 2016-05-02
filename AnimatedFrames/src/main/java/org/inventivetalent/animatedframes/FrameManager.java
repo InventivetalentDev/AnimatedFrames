@@ -53,6 +53,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
 @ToString
@@ -219,6 +220,11 @@ public class FrameManager {
 	}
 
 	public void writeFramesToFile() {
+		if (size() <= 0) {
+			plugin.getLogger().info("No frames found");
+			return;
+		}
+
 		TimingsHelper.startTiming("AnimatedFrames - writeToFile");
 
 		for (AnimatedFrame frame : getFrames()) {
@@ -283,13 +289,21 @@ public class FrameManager {
 				plugin.getLogger().log(Level.WARNING, "Failed to load Menu '" + name + "'", e);
 			}
 		}
-		for (AnimatedFrame loadedFrame : getFrames()) {
+		final AtomicInteger startCounter = new AtomicInteger(1);
+		final int toStart = size();
+		for (final AnimatedFrame loadedFrame : getFrames()) {
 			try {
 				Bukkit.getPluginManager().callEvent(new AsyncFrameStartEvent(loadedFrame));
 			} catch (Throwable throwable) {
 				plugin.getLogger().log(Level.WARNING, "Unhandled exception in FrameStartEvent for '" + loadedFrame.getName() + "'");
 			}
 
+			loadedFrame.startCallback = new Callback<Void>() {
+				@Override
+				public void call(Void aVoid) {
+					plugin.getLogger().info("Started '" + loadedFrame.getName() + "' (" + startCounter.getAndIncrement() + "/" + toStart + ")");
+				}
+			};
 			loadedFrame.refresh();
 			startFrame(loadedFrame);
 			loadedFrame.setPlaying(true);
