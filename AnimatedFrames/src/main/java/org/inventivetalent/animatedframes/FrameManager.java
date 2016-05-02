@@ -215,6 +215,17 @@ public class FrameManager {
 	}
 
 	@Synchronized
+	public Set<AnimatedFrame> getFramesInWorld(String worldName) {
+		Set<AnimatedFrame> frames = new HashSet<>();
+		for (AnimatedFrame frame : frameMap.values()) {
+			if (frame.getWorldName().equals(worldName)) {
+				frames.add(frame);
+			}
+		}
+		return frames;
+	}
+
+	@Synchronized
 	public int size() {
 		return frameMap.size();
 	}

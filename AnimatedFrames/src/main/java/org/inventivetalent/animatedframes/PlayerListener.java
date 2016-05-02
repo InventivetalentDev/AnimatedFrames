@@ -31,6 +31,7 @@ package org.inventivetalent.animatedframes;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -59,6 +60,22 @@ public class PlayerListener implements Listener {
 		for (AnimatedFrame frame : plugin.frameManager.getFrames()) {
 			frame.removeViewer(event.getPlayer());
 		}
+	}
+
+	@EventHandler
+	public void on(final PlayerChangedWorldEvent event) {
+		for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(event.getFrom().getName())) {
+			frame.removeViewer(event.getPlayer());
+		}
+		final String newWorld = event.getPlayer().getWorld().getName();
+		Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+			@Override
+			public void run() {
+				for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(newWorld)) {
+					frame.addViewer(event.getPlayer());
+				}
+			}
+		});
 	}
 
 }
