@@ -1,0 +1,23 @@
+
+
+message:
+  command:
+    create:
+      setup:
+        first: "&ePlease right-click the &abottom-left corner &eof the frame"
+        second: "&ePlease right-click the &atop-right corner &eof the frame"
+        set:
+          first: "&aFirst corner set"
+          second: "&aSecond corner set"
+        complete: "&aSetup complete! &eCreating frame '%s' with image '%s'..."
+        loading: "&7Loading image & generating maps..."
+        starting: "&7Starting playback..."
+        started: "&aAnimation started!"
+      error:
+        exists: "&cFrame already exists"
+        invalidImage: "&cInvalid image path specified"
+    delete:
+      stopping: "&eStopping animation..."
+      removed: "&aFrame removed."
+      error:
+        notFound: "&cFrame not found"
