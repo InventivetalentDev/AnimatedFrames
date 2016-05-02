@@ -197,8 +197,10 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 					OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(iterator.next());
 					Player player = offlinePlayer != null ? offlinePlayer.getPlayer() : null;
 					if (player != null) {
-						if (player.getLocation().distanceSquared(baseVector.toBukkitLocation(getWorld())) < 1024) {
-							controller.showInFrames(player.getPlayer(), this.itemFrameIds);
+						if (player.getWorld().getName().equals(worldName)) {
+							if (player.getLocation().distanceSquared(baseVector.toBukkitLocation(getWorld())) < 1024) {
+								controller.showInFrames(player.getPlayer(), this.itemFrameIds);
+							}
 						}
 					} else {
 						iterator.remove();
