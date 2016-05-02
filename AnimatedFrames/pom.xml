@@ -34,7 +34,7 @@
 
     <groupId>org.inventivetalent</groupId>
     <artifactId>animatedframes</artifactId>
-    <version>4.0.0</version>
+    <version>4.0.1</version>
     <name>AnimatedFrames</name>
 
     <build>
@@ -87,12 +87,18 @@
                                     <include>org.inventivetalent:boundingboxapi**</include>
                                     <include>org.inventivetalent:frame-map-util**</include>
                                     <include>org.inventivetalent.spiget-update:bukkit**</include>
+
+                                    <include>com.google.code.gson:gson**</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
                                     <pattern>org.mcstats</pattern>
                                     <shadedPattern>org.inventivetalent.animatedframes.mcstats</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.google.gson</pattern>
+                                    <shadedPattern>org.inventivetalent.animatedframes.gson</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -154,12 +160,12 @@
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>boundingboxapi</artifactId>
-            <version>1.0.0</version>
+            <version>[1.2.0,)</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>frame-map-util</artifactId>
-            <version>1.0.0</version>
+            <version>[1.0.0,)</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
