@@ -63,6 +63,10 @@
                   <shadedPattern>org.inventivetalent.animatedframes.mcstats</shadedPattern>
                 </relocation>
                 <relocation>
+                  <pattern>org.inventivetalent.boundingbox</pattern>
+                  <shadedPattern>org.inventivetalent.animatedframes.boundingbox</shadedPattern>
+                </relocation>
+                <relocation>
                   <pattern>com.google.gson</pattern>
                   <shadedPattern>org.inventivetalent.animatedframes.gson</shadedPattern>
                 </relocation>
