@@ -95,7 +95,12 @@ public class Commands {
 			sender.sendMessage(MESSAGE_LOADER.getMessage("create.error.invalidImage", "create.error.invalidImage"));
 			return;
 		}
+		if (!checkImageType(image)) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("create.error.unknownType", "create.error.unknownType"));
+			// Just a warning -> carry on
+		}
 
+		sender.sendMessage("  ");
 		sender.sendMessage(MESSAGE_LOADER.getMessage("create.setup.first", "create.setup.first"));
 		plugin.interactListener.listenForInteract(sender, new Callback<PlayerInteractEntityEvent>() {
 			@Override
@@ -123,6 +128,7 @@ public class Commands {
 												return String.format(message, name, image);
 											}
 										}));
+										sender.sendMessage("  ");
 										plugin.frameExecutor.execute(new Runnable() {
 											@Override
 											public void run() {
@@ -139,6 +145,7 @@ public class Commands {
 															@Override
 															public void run() {
 																frame.addViewer(event.getPlayer());
+																sender.sendMessage("  ");
 																sender.sendMessage(MESSAGE_LOADER.getMessage("create.setup.started", "create.setup.started"));
 															}
 														}, 40);
@@ -223,6 +230,10 @@ public class Commands {
 
 			sender.spigot().sendMessage(component);
 		}
+	}
+
+	boolean checkImageType(String url) {
+		return url.endsWith(".png") || url.endsWith(".gif") || url.endsWith(".jpg") || url.endsWith(".jpeg");
 	}
 
 }

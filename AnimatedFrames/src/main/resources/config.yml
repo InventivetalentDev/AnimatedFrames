@@ -16,6 +16,7 @@ message:
       error:
         exists: "&cFrame already exists"
         invalidImage: "&cInvalid image path specified"
+        unknownType: "&cCould not identify the image type. Please make sure you are using the correct link. (Generating anyway, check console for errors)"
     delete:
       stopping: "&eStopping animation..."
       removed: "&aFrame removed."
