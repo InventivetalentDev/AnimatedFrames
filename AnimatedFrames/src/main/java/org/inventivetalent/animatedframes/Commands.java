@@ -34,6 +34,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -61,6 +62,43 @@ public class Commands {
 
 	public Commands(AnimatedFramesPlugin plugin) {
 		this.plugin = plugin;
+	}
+
+	@Command(name = "animatedframes",
+			 aliases = {
+					 "af",
+					 "afhelp",
+					 "framehelp" },
+			 usage = "",
+			 max = 0,
+			 fallbackPrefix = "animatedframes")
+	public void helpCommand(final CommandSender sender) {
+		sender.sendMessage("§6AnimatedFrames v" + plugin.getDescription().getVersion() + (plugin.updateAvailable ? " §a*Update available" : ""));
+		sender.sendMessage(" ");
+
+		int c = 0;
+		if (sender.hasPermission("animatedframes.create")) {
+			c++;
+			sender.sendMessage("§e/afcreate <Name> <Image>");
+			sender.sendMessage("§bCreate a new image");
+			sender.sendMessage(" ");
+		}
+		if (sender.hasPermission("animatedframes.remove")) {
+			c++;
+			sender.sendMessage("§e/afremove <Name>");
+			sender.sendMessage("§bRemove an existing image");
+			sender.sendMessage(" ");
+		}
+		if (sender.hasPermission("animatedframes.list")) {
+			c++;
+			sender.sendMessage("§e/aflist");
+			sender.sendMessage("§bGet a list of images");
+			sender.sendMessage(" ");
+		}
+
+		if (c > 0) {
+			sender.sendMessage("§eType §a/help <Command> §efor more information.");
+		}
 	}
 
 	@Command(name = "framecreate",

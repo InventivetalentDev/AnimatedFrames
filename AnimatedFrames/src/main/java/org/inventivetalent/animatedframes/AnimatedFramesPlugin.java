@@ -47,6 +47,7 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 	public InteractListener interactListener;
 
 	SpigetUpdate spigetUpdate;
+	public boolean updateAvailable;
 
 	@Override
 	public void onEnable() {
@@ -96,6 +97,7 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 			spigetUpdate.checkForUpdate(new UpdateCallback() {
 				@Override
 				public void updateAvailable(String s, String s1, boolean b) {
+					updateAvailable = true;
 					getLogger().info("A new version is available (" + s + "). Download it from https://r.spiget.org/5583");
 					//					getLogger().info("(If the above version is lower than the installed version, you are probably up-to-date)");
 				}
