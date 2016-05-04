@@ -1,5 +1,3 @@
-
-
 message:
   command:
     create:
@@ -22,3 +20,7 @@ message:
       removed: "&aFrame removed."
       error:
         notFound: "&cFrame not found"
+
+# This is a (slightly hacky) fix for images which Java interpretes as the wrong image type
+# You should enable this if you get this error when creating a image: http://paste.inventivetalent.org/nokomiquri
+fixImageTypes: false

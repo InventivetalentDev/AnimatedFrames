@@ -31,6 +31,7 @@ package org.inventivetalent.animatedframes;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
+import org.inventivetalent.pluginannotations.config.ConfigValue;
 import org.inventivetalent.update.spiget.SpigetUpdate;
 import org.inventivetalent.update.spiget.UpdateCallback;
 import org.inventivetalent.update.spiget.comparator.VersionComparator;
@@ -48,6 +49,8 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 
 	SpigetUpdate spigetUpdate;
 	public boolean updateAvailable;
+
+	@ConfigValue(path = "fixImageTypes") boolean fixImageTypes = false;
 
 	@Override
 	public void onEnable() {
