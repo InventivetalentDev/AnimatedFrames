@@ -45,14 +45,14 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void on(final PlayerJoinEvent event) {
-		Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+		Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
 			@Override
 			public void run() {
 				for (AnimatedFrame frame : plugin.frameManager.getFrames()) {
 					frame.addViewer(event.getPlayer());
 				}
 			}
-		});
+		}, 20);
 	}
 
 	@EventHandler
