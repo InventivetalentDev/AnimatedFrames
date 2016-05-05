@@ -34,6 +34,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.inventivetalent.update.spiget.UpdateCallback;
 
 public class PlayerListener implements Listener {
 
@@ -53,6 +54,20 @@ public class PlayerListener implements Listener {
 				}
 			}
 		}, 20);
+
+		if (event.getPlayer().hasPermission("animatedframes.updatecheck")) {
+			plugin.spigetUpdate.checkForUpdate(new UpdateCallback() {
+				@Override
+				public void updateAvailable(String s, String s1, boolean b) {
+					plugin.updateAvailable = true;
+					event.getPlayer().sendMessage("§aA new version for §6AnimatedFrames §ais available (§7v" + s + "§a). Download it from https://r.spiget.org/5583");
+				}
+
+				@Override
+				public void upToDate() {
+				}
+			});
+		}
 	}
 
 	@EventHandler
@@ -77,5 +92,6 @@ public class PlayerListener implements Listener {
 			}
 		}, 20);
 	}
+
 
 }
