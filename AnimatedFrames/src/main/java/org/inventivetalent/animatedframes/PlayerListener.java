@@ -68,14 +68,14 @@ public class PlayerListener implements Listener {
 			frame.removeViewer(event.getPlayer());
 		}
 		final String newWorld = event.getPlayer().getWorld().getName();
-		Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+		Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
 			@Override
 			public void run() {
 				for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(newWorld)) {
 					frame.addViewer(event.getPlayer());
 				}
 			}
-		});
+		}, 20);
 	}
 
 }
