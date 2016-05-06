@@ -1,3 +1,11 @@
+# Make sure all animations are started at the same time on startup (useful if you usethe same image on multiple frames)
+synchronizedStart: false
+
+# This is a (slightly hacky) fix for images which Java interpretes as the wrong image type
+# You should enable this if you get this error when creating a image: http://paste.inventivetalent.org/nokomiquri
+fixImageTypes: false
+
+
 message:
   command:
     create:
@@ -20,7 +28,3 @@ message:
       removed: "&aFrame removed."
       error:
         notFound: "&cFrame not found"
-
-# This is a (slightly hacky) fix for images which Java interpretes as the wrong image type
-# You should enable this if you get this error when creating a image: http://paste.inventivetalent.org/nokomiquri
-fixImageTypes: false

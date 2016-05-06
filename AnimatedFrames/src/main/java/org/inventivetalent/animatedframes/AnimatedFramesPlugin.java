@@ -50,7 +50,9 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 	SpigetUpdate spigetUpdate;
 	public boolean updateAvailable;
 
-	@ConfigValue(path = "fixImageTypes") boolean fixImageTypes = false;
+	@ConfigValue(path = "fixImageTypes")            boolean fixImageTypes     = false;
+	@ConfigValue(path = "synchronizedStart") static boolean synchronizedStart = false;
+	static                                          long    synchronizedTime  = 0;
 
 	@Override
 	public void onEnable() {

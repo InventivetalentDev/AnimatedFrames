@@ -171,6 +171,17 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 			}
 		}
 
+		if (AnimatedFramesPlugin.synchronizedStart) {
+			while (System.currentTimeMillis() < AnimatedFramesPlugin.synchronizedTime) {
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					plugin.getLogger().warning("synchronized start delay for '" + getName() + "' has been interrupted");
+					return;
+				}
+			}
+		}
+
 		while (this.playing && this.plugin.isEnabled()) {
 			if (startCallback != null) {
 				startCallback.call(null);

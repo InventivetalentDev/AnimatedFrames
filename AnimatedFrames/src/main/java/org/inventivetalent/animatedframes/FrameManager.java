@@ -302,6 +302,12 @@ public class FrameManager {
 		}
 		final AtomicInteger startCounter = new AtomicInteger(1);
 		final int toStart = size();
+
+		if (AnimatedFramesPlugin.synchronizedStart) {
+			long startDelay = (2500 * toStart);
+			plugin.getLogger().info("Starting all frames in " + (startDelay / 1000.0) + " seconds.");
+			AnimatedFramesPlugin.synchronizedTime = System.currentTimeMillis() + startDelay;
+		}
 		for (final AnimatedFrame loadedFrame : getFrames()) {
 			try {
 				Bukkit.getPluginManager().callEvent(new AsyncFrameStartEvent(loadedFrame));
