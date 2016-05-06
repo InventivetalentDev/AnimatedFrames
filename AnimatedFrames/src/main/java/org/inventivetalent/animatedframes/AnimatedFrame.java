@@ -78,6 +78,8 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 	@Expose private int height;
 	private         int length;
 
+	@Expose public UUID creator;
+
 	@Expose public JsonObject meta = new JsonObject();
 
 	protected int[][] itemFrameIds = NULL_INT_ARRAY;
