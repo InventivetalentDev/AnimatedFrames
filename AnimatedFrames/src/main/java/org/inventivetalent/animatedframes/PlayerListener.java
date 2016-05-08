@@ -30,10 +30,13 @@ package org.inventivetalent.animatedframes;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.inventivetalent.update.spiget.UpdateCallback;
 
 public class PlayerListener implements Listener {
@@ -93,5 +96,23 @@ public class PlayerListener implements Listener {
 		}, 20);
 	}
 
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void on(PlayerDeathEvent event) {
+		for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(event.getEntity().getWorld().getName())) {
+			frame.removeViewer(event.getEntity());
+		}
+	}
+
+	@EventHandler
+	public void on(final PlayerRespawnEvent event) {
+		Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
+			@Override
+			public void run() {
+				for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(event.getPlayer().getWorld().getName())) {
+					frame.addViewer(event.getPlayer());
+				}
+			}
+		}, 20);
+	}
 
 }
