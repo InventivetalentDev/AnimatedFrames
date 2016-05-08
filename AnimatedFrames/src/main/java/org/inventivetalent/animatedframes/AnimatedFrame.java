@@ -286,16 +286,18 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 			this.worldPlayers.remove(player.getUniqueId());
 			empty = this.worldPlayers.isEmpty();
 		}
-		for (MapWrapper wrapper : mapWrappers) {
-			if (wrapper == null) {
-				plugin.getLogger().warning("Null-element in MapWrapper array of " + getName());
-				continue;
-			}
-			MapController controller = wrapper.getController();
-			if (empty) {
-				controller.clearViewers();
-			} else {
-				controller.removeViewer(player);
+		if (this.mapWrappers != null) {
+			for (MapWrapper wrapper : mapWrappers) {
+				if (wrapper == null) {
+					plugin.getLogger().warning("Null-element in MapWrapper array of " + getName());
+					continue;
+				}
+				MapController controller = wrapper.getController();
+				if (empty) {
+					controller.clearViewers();
+				} else {
+					controller.removeViewer(player);
+				}
 			}
 		}
 	}
