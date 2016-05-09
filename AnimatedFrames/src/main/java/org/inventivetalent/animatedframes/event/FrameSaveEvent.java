@@ -34,14 +34,13 @@ import org.inventivetalent.animatedframes.AnimatedFrame;
 
 import java.io.File;
 
-public class AsyncFrameSaveEvent extends Event {
+public class FrameSaveEvent extends Event {
 
 
 	private AnimatedFrame frame;
 	private File file;
 
-	public AsyncFrameSaveEvent(AnimatedFrame frame,File file) {
-		super(true);
+	public FrameSaveEvent(AnimatedFrame frame,File file) {
 		this.frame=frame;
 		this.file=file;
 	}
