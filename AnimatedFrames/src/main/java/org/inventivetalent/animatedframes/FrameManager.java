@@ -236,7 +236,7 @@ public class FrameManager {
 			return;
 		}
 
-		TimingsHelper.startTiming("AnimatedFrames - writeToFile");
+//		TimingsHelper.startTiming("AnimatedFrames - writeToFile");
 
 		for (AnimatedFrame frame : getFrames()) {
 			plugin.getLogger().fine("Saving '" + frame.getName() + "'...");
@@ -264,11 +264,11 @@ public class FrameManager {
 			plugin.getLogger().log(Level.WARNING, "Failed to save Frame-Index file", e);
 		}
 
-		TimingsHelper.stopTiming("AnimatedFrames - writeToFile");
+//		TimingsHelper.stopTiming("AnimatedFrames - writeToFile");
 	}
 
 	public void readFramesFromFile() {
-		TimingsHelper.startTiming("AnimatedFrames - readFromFile");
+//		TimingsHelper.startTiming("AnimatedFrames - readFromFile");
 
 		Set<String> index;
 		try {
@@ -326,7 +326,7 @@ public class FrameManager {
 			loadedFrame.setPlaying(true);
 		}
 
-		TimingsHelper.stopTiming("AnimatedFrames - readFromFile");
+//		TimingsHelper.stopTiming("AnimatedFrames - readFromFile");
 	}
 
 }
