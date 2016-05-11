@@ -48,6 +48,7 @@ import org.inventivetalent.mapmanager.controller.MapController;
 import org.inventivetalent.mapmanager.controller.MultiMapController;
 import org.inventivetalent.mapmanager.manager.MapManager;
 import org.inventivetalent.mapmanager.wrapper.MapWrapper;
+import org.inventivetalent.reflection.minecraft.Minecraft;
 import org.inventivetalent.vectors.d2.Vector2DDouble;
 import org.inventivetalent.vectors.d3.Vector3DDouble;
 
@@ -57,10 +58,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 @Data
@@ -319,7 +317,13 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 
 					Vector2DDouble startVector = minCorner2d;
 
-					for (Entity entity : world.getNearbyEntities(baseVector.toBukkitLocation(world), width, height, width)) {
+					Collection<? extends Entity> entities;
+					if (Minecraft.VERSION.olderThan(Minecraft.Version.v1_8_R2)) {
+						entities = world.getEntitiesByClass(ItemFrame.class);
+					} else {
+						entities = world.getNearbyEntities(baseVector.toBukkitLocation(world), width, height, width);
+					}
+					for (Entity entity : entities) {
 						if (entity instanceof ItemFrame) {
 							if (boundingBox.expand(0.1).contains(new Vector3DDouble(entity.getLocation()))) {
 								for (int y = 0; y < getBlockHeight(); y++) {
