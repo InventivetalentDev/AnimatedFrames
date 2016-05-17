@@ -17,6 +17,7 @@ message:
           second: "&aSecond corner set"
         complete: "&aSetup complete! &eCreating frame '%s' with image '%s'..."
         loading: "&7Loading image & generating maps..."
+        saving: "&7Saving frame data to file..."
         starting: "&7Starting playback..."
         started: "&aAnimation started!"
       error:

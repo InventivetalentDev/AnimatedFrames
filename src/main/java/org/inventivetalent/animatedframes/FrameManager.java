@@ -230,32 +230,25 @@ public class FrameManager {
 		return frameMap.size();
 	}
 
-	public void writeFramesToFile() {
-		if (size() <= 0) {
-			plugin.getLogger().info("No frames found");
-			return;
-		}
-
-//		TimingsHelper.startTiming("AnimatedFrames - writeToFile");
-
-		for (AnimatedFrame frame : getFrames()) {
-			plugin.getLogger().fine("Saving '" + frame.getName() + "'...");
+	public void writeToFile(AnimatedFrame frame) {
+		plugin.getLogger().fine("Saving '" + frame.getName() + "'...");
+		try {
+			File saveFile = new File(saveDirectory, URLEncoder.encode(frame.getName(), "UTF-8") + ".afd");
+			if (!saveFile.exists()) { saveFile.createNewFile(); }
 			try {
-				File saveFile = new File(saveDirectory, URLEncoder.encode(frame.getName(), "UTF-8") + ".afd");
-				if (!saveFile.exists()) { saveFile.createNewFile(); }
-				try {
-					Bukkit.getPluginManager().callEvent(new FrameSaveEvent(frame, saveFile));
-				} catch (Throwable throwable) {
-					plugin.getLogger().log(Level.WARNING, "Unhandled exception in FrameSaveEvent for '" + frame.getName() + "'", throwable);
-				}
-				try (Writer writer = new FileWriter(saveFile)) {
-					GSON.toJson(frame, writer);
-				}
-			} catch (IOException e) {
-				plugin.getLogger().log(Level.WARNING, "Failed to save Frame '" + frame.getName() + "'", e);
+				Bukkit.getPluginManager().callEvent(new FrameSaveEvent(frame, saveFile));
+			} catch (Throwable throwable) {
+				plugin.getLogger().log(Level.WARNING, "Unhandled exception in FrameSaveEvent for '" + frame.getName() + "'", throwable);
 			}
+			try (Writer writer = new FileWriter(saveFile)) {
+				GSON.toJson(frame, writer);
+			}
+		} catch (IOException e) {
+			plugin.getLogger().log(Level.WARNING, "Failed to save Frame '" + frame.getName() + "'", e);
 		}
+	}
 
+	public void writeIndexToFile() {
 		try {
 			try (Writer writer = new FileWriter(indexFile)) {
 				new Gson().toJson(getFrameNames(), writer);
@@ -263,9 +256,44 @@ public class FrameManager {
 		} catch (IOException e) {
 			plugin.getLogger().log(Level.WARNING, "Failed to save Frame-Index file", e);
 		}
-
-//		TimingsHelper.stopTiming("AnimatedFrames - writeToFile");
 	}
+
+//	public void writeFramesToFile() {
+//		if (size() <= 0) {
+//			plugin.getLogger().info("No frames found");
+//			return;
+//		}
+//
+////		TimingsHelper.startTiming("AnimatedFrames - writeToFile");
+//
+//		for (AnimatedFrame frame : getFrames()) {
+//			plugin.getLogger().fine("Saving '" + frame.getName() + "'...");
+//			try {
+//				File saveFile = new File(saveDirectory, URLEncoder.encode(frame.getName(), "UTF-8") + ".afd");
+//				if (!saveFile.exists()) { saveFile.createNewFile(); }
+//				try {
+//					Bukkit.getPluginManager().callEvent(new FrameSaveEvent(frame, saveFile));
+//				} catch (Throwable throwable) {
+//					plugin.getLogger().log(Level.WARNING, "Unhandled exception in FrameSaveEvent for '" + frame.getName() + "'", throwable);
+//				}
+//				try (Writer writer = new FileWriter(saveFile)) {
+//					GSON.toJson(frame, writer);
+//				}
+//			} catch (IOException e) {
+//				plugin.getLogger().log(Level.WARNING, "Failed to save Frame '" + frame.getName() + "'", e);
+//			}
+//		}
+//
+//		try {
+//			try (Writer writer = new FileWriter(indexFile)) {
+//				new Gson().toJson(getFrameNames(), writer);
+//			}
+//		} catch (IOException e) {
+//			plugin.getLogger().log(Level.WARNING, "Failed to save Frame-Index file", e);
+//		}
+//
+////		TimingsHelper.stopTiming("AnimatedFrames - writeToFile");
+//	}
 
 	public void readFramesFromFile() {
 //		TimingsHelper.startTiming("AnimatedFrames - readFromFile");

@@ -173,6 +173,12 @@ public class Commands {
 												sender.sendMessage(MESSAGE_LOADER.getMessage("create.setup.loading", "create.setup.loading"));
 												final AnimatedFrame frame = plugin.frameManager.createFrame(name, image, firstFrame, secondFrame);
 												frame.creator = sender.getUniqueId();
+
+												// Save frame & index
+												sender.sendMessage(MESSAGE_LOADER.getMessage("create.setup.saving", "create.setup.saving"));
+												plugin.frameManager.writeToFile(frame);
+												plugin.frameManager.writeIndexToFile();
+
 												frame.refresh();
 												plugin.frameManager.startFrame(frame);
 

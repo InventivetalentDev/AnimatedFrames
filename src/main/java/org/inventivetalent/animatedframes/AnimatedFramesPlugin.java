@@ -118,12 +118,12 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		getLogger().info("Saving " + frameManager.size() + " frames...");
+//		getLogger().info("Saving " + frameManager.size() + " frames...");
 		//		frameExecutor.execute(new Runnable() {
 		//			@Override
 		//			public void run() {
-		frameManager.writeFramesToFile();
-		getLogger().info("Done.");
+//		frameManager.writeFramesToFile();
+//		getLogger().info("Done.");
 		//			}
 		//		});
 	}
