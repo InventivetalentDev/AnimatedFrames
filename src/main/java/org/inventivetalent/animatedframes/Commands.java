@@ -285,6 +285,7 @@ public class Commands {
 
 	@Command(name = "placeframes",
 			 aliases = {
+					 "afplace",
 					 "frameplace",
 					 "generateframes",
 					 "afp",
