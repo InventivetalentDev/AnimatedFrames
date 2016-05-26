@@ -29,3 +29,12 @@ message:
       removed: "&aFrame removed."
       error:
         notFound: "&cFrame not found"
+    place:
+      first: "&ePlease right-click the &abottom-left&e block"
+      second: "&ePlease right-click the &atop-right&e block"
+      set:
+        first: "&aFirst corner set"
+        second: "&aSecond corner set"
+      done: "&aFrames placed!"
+      error:
+        face: "&cFirst clicked side does not match the second side"

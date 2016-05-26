@@ -33,6 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.inventivetalent.mapmanager.event.MapInteractEvent;
 
 import java.util.HashMap;
@@ -43,7 +44,8 @@ public class InteractListener implements Listener {
 
 	private AnimatedFramesPlugin plugin;
 
-	private final Map<UUID, Callback<PlayerInteractEntityEvent>> interactMap = new HashMap<>();
+	private final Map<UUID, Callback<PlayerInteractEntityEvent>> entityInteractMap = new HashMap<>();
+	private final Map<UUID, Callback<PlayerInteractEvent>>       interactMap       = new HashMap<>();
 
 	public InteractListener(AnimatedFramesPlugin plugin) {
 		this.plugin = plugin;
@@ -60,12 +62,30 @@ public class InteractListener implements Listener {
 	public void on(PlayerInteractEntityEvent event) {
 		if (event.getRightClicked().getType() == EntityType.ITEM_FRAME) {
 			Callback<PlayerInteractEntityEvent> callback;
+			while ((callback = entityInteractMap.remove(event.getPlayer().getUniqueId())) != null)
+				callback.call(event);
+		}
+	}
+
+	public void listenForEntityInteract(Player player, Callback<PlayerInteractEntityEvent> callback) {
+		if (callback == null) { return; }
+		if (player != null) {
+			entityInteractMap.put(player.getUniqueId(), callback);
+		} else {
+			callback.call(null);
+		}
+	}
+
+	@EventHandler
+	public void on(PlayerInteractEvent event) {
+		if (event.getClickedBlock() != null) {
+			Callback<PlayerInteractEvent> callback;
 			while ((callback = interactMap.remove(event.getPlayer().getUniqueId())) != null)
 				callback.call(event);
 		}
 	}
 
-	public void listenForInteract(Player player, Callback<PlayerInteractEntityEvent> callback) {
+	public void listenForInteract(Player player, Callback<PlayerInteractEvent> callback) {
 		if (callback == null) { return; }
 		if (player != null) {
 			interactMap.put(player.getUniqueId(), callback);

@@ -34,11 +34,15 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.command.Command;
 import org.inventivetalent.pluginannotations.command.Completion;
@@ -140,7 +144,7 @@ public class Commands {
 
 		sender.sendMessage("  ");
 		sender.sendMessage(MESSAGE_LOADER.getMessage("create.setup.first", "create.setup.first"));
-		plugin.interactListener.listenForInteract(sender, new Callback<PlayerInteractEntityEvent>() {
+		plugin.interactListener.listenForEntityInteract(sender, new Callback<PlayerInteractEntityEvent>() {
 			@Override
 			public void call(PlayerInteractEntityEvent event) {
 				if (event != null && event.getRightClicked().getType() == EntityType.ITEM_FRAME) {
@@ -152,7 +156,7 @@ public class Commands {
 						@Override
 						public void run() {
 							sender.sendMessage(MESSAGE_LOADER.getMessage("create.setup.second", "create.setup.second"));
-							plugin.interactListener.listenForInteract(sender, new Callback<PlayerInteractEntityEvent>() {
+							plugin.interactListener.listenForEntityInteract(sender, new Callback<PlayerInteractEntityEvent>() {
 								@Override
 								public void call(final PlayerInteractEntityEvent event) {
 									if (event != null && event.getRightClicked().getType() == EntityType.ITEM_FRAME) {
@@ -275,6 +279,70 @@ public class Commands {
 
 			sender.spigot().sendMessage(component);
 		}
+	}
+
+	@Command(name = "placeframes",
+			 aliases = {
+					 "frameplace",
+					 "generateframes",
+					 "afp",
+					 "afg"
+			 },
+			 usage = "",
+			 description = "Place item frames",
+			 fallbackPrefix = "animatedframes")
+	@Permission("animatedframes.place")
+	public void placeFrames(final Player sender) {
+		sender.sendMessage("  ");
+		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+			@Override
+			public void run() {
+				sender.sendMessage(MESSAGE_LOADER.getMessage("place.first", "place.first"));
+				plugin.interactListener.listenForInteract(sender, new Callback<PlayerInteractEvent>() {
+					@Override
+					public void call(PlayerInteractEvent event) {
+						final Block firstBlock = event.getClickedBlock();
+						final BlockFace firstFace = event.getBlockFace();
+						sender.sendMessage(MESSAGE_LOADER.getMessage("place.set.first", "place.set.first"));
+
+						Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+							@Override
+							public void run() {
+								sender.sendMessage("  ");
+								sender.sendMessage(MESSAGE_LOADER.getMessage("place.second", "place.second"));
+								plugin.interactListener.listenForInteract(sender, new Callback<PlayerInteractEvent>() {
+									@Override
+									public void call(PlayerInteractEvent event) {
+										final Block secondBlock = event.getClickedBlock();
+										final BlockFace secondFace = event.getBlockFace();
+										sender.sendMessage(MESSAGE_LOADER.getMessage("place.set.second", "place.set.second"));
+
+										if (firstFace != secondFace) {
+											sender.sendMessage(MESSAGE_LOADER.getMessage("place.error.face", "place.error.face"));
+											return;
+										}
+
+										for (int x = firstBlock.getX(); x <= secondBlock.getX(); x++) {
+											for (int y = firstBlock.getY(); y <= secondBlock.getY(); y++) {
+												for (int z = firstBlock.getZ(); z <= secondBlock.getZ(); z++) {
+													Location location = new Location(firstBlock.getWorld(), x, y, z);
+													location = location.getBlock().getRelative(secondFace).getLocation();
+													ItemFrame frame = location.getWorld().spawn(location, ItemFrame.class);
+													frame.setFacingDirection(secondFace.getOppositeFace());
+												}
+											}
+										}
+
+										sender.sendMessage(" ");
+										sender.sendMessage(MESSAGE_LOADER.getMessage("place.done", "place.done"));
+									}
+								});
+							}
+						}, 10);
+					}
+				});
+			}
+		}, 5);
 	}
 
 	boolean checkImageType(String url) {
