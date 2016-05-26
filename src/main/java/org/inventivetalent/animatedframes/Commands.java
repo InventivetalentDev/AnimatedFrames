@@ -222,7 +222,8 @@ public class Commands {
 			 usage = "<Name>",
 			 description = "Remove an image",
 			 min = 1,
-			 max = 1)
+			 max = 1,
+			 fallbackPrefix = "animatedframes")
 	@Permission("animatedframes.remove")
 	public void frameRemove(final Player sender, final String name) {
 		if (!plugin.frameManager.doesFrameExist(name)) {
@@ -259,7 +260,8 @@ public class Commands {
 					 "afl" },
 			 usage = "",
 			 description = "Get a list of frames",
-			 max = 0)
+			 max = 0,
+			 fallbackPrefix = "animatedframes")
 	@Permission("animatedframes.list")
 	public void frameList(final Player sender) {
 		sender.sendMessage("  ");
