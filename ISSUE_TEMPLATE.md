@@ -9,7 +9,7 @@
 
 ## What Spigot version are you using? *Type /version*  
 
-## What plugins ae you using? *Type /plugins*  
+## What plugins are you using? *Type /plugins*  
 
 ## Do you have an error log? Use [pastebin.com](http://pastebin.com). *If you're not sure, upload your whole server log*  
 
