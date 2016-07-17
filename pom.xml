@@ -34,7 +34,7 @@
 
     <groupId>org.inventivetalent</groupId>
     <artifactId>animatedframes</artifactId>
-    <version>4.3.2-SNAPSHOT</version>
+    <version>4.3.2</version>
     <name>AnimatedFrames</name>
 
     <build>
