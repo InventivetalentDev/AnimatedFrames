@@ -59,6 +59,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 @Data
@@ -88,7 +89,7 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 	protected int delayTicks = 0;
 
 	private final Object    worldPlayersLock = new Object[0];
-	private       Set<UUID> worldPlayers     = new HashSet<>();
+	private       Set<UUID> worldPlayers     = Collections.newSetFromMap(new ConcurrentHashMap<UUID, Boolean>());
 
 	private AnimatedFramesPlugin plugin       = (AnimatedFramesPlugin) Bukkit.getPluginManager().getPlugin("AnimatedFrames");
 	private boolean              imageLoaded  = false;

@@ -34,7 +34,7 @@
 
     <groupId>org.inventivetalent</groupId>
     <artifactId>animatedframes</artifactId>
-    <version>4.3.1</version>
+    <version>4.3.2-SNAPSHOT</version>
     <name>AnimatedFrames</name>
 
     <build>
@@ -95,6 +95,10 @@
                                 <relocation>
                                     <pattern>org.mcstats</pattern>
                                     <shadedPattern>org.inventivetalent.animatedframes.mcstats</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.inventivetalent.vectors</pattern>
+                                    <shadedPattern>org.inventivetalent.animatedframes.vectors</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.inventivetalent.boundingbox</pattern>

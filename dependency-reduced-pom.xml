@@ -4,7 +4,7 @@
   <groupId>org.inventivetalent</groupId>
   <artifactId>animatedframes</artifactId>
   <name>AnimatedFrames</name>
-  <version>4.3.1</version>
+  <version>4.3.2-SNAPSHOT</version>
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
@@ -61,6 +61,10 @@
                 <relocation>
                   <pattern>org.mcstats</pattern>
                   <shadedPattern>org.inventivetalent.animatedframes.mcstats</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.inventivetalent.vectors</pattern>
+                  <shadedPattern>org.inventivetalent.animatedframes.vectors</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>org.inventivetalent.boundingbox</pattern>
