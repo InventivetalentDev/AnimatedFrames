@@ -4,7 +4,7 @@
   <groupId>org.inventivetalent</groupId>
   <artifactId>animatedframes</artifactId>
   <name>AnimatedFrames</name>
-  <version>4.3.2</version>
+  <version>4.3.3</version>
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
