@@ -121,13 +121,11 @@
     </build>
     <distributionManagement>
         <repository>
-            <id>releases</id>
-            <name>Internal Releases</name>
+            <id>sonatype-nexus-releases</id>
             <url>http://repo.inventivetalent.org/content/repositories/releases/</url>
         </repository>
         <snapshotRepository>
-            <id>snapshots</id>
-            <name>Internal Releases</name>
+            <id>sonatype-nexus-snapshots</id>
             <url>http://repo.inventivetalent.org/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
