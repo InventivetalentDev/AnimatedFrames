@@ -35,7 +35,6 @@ import org.inventivetalent.pluginannotations.config.ConfigValue;
 import org.inventivetalent.update.spiget.SpigetUpdate;
 import org.inventivetalent.update.spiget.UpdateCallback;
 import org.inventivetalent.update.spiget.comparator.VersionComparator;
-import org.mcstats.MetricsLite;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -92,38 +91,30 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 			}
 		}, 40);
 
-		try {
-			MetricsLite metrics = new MetricsLite(this);
-			if (metrics.start()) {
-				getLogger().info("Metrics started");
+		spigetUpdate = new SpigetUpdate(this, 5583).setUserAgent("AnimatedFrames/" + getDescription().getVersion()).setVersionComparator(VersionComparator.SEM_VER);
+		spigetUpdate.checkForUpdate(new UpdateCallback() {
+			@Override
+			public void updateAvailable(String s, String s1, boolean b) {
+				updateAvailable = true;
+				getLogger().info("A new version is available (" + s + "). Download it from https://r.spiget.org/5583");
+				//					getLogger().info("(If the above version is lower than the installed version, you are probably up-to-date)");
 			}
 
-			spigetUpdate = new SpigetUpdate(this, 5583).setUserAgent("AnimatedFrames/" + getDescription().getVersion()).setVersionComparator(VersionComparator.SEM_VER);
-			spigetUpdate.checkForUpdate(new UpdateCallback() {
-				@Override
-				public void updateAvailable(String s, String s1, boolean b) {
-					updateAvailable = true;
-					getLogger().info("A new version is available (" + s + "). Download it from https://r.spiget.org/5583");
-					//					getLogger().info("(If the above version is lower than the installed version, you are probably up-to-date)");
-				}
-
-				@Override
-				public void upToDate() {
-					getLogger().info("The plugin is up-to-date.");
-				}
-			});
-		} catch (Exception e) {
-		}
+			@Override
+			public void upToDate() {
+				getLogger().info("The plugin is up-to-date.");
+			}
+		});
 	}
 
 	@Override
 	public void onDisable() {
-//		getLogger().info("Saving " + frameManager.size() + " frames...");
+		//		getLogger().info("Saving " + frameManager.size() + " frames...");
 		//		frameExecutor.execute(new Runnable() {
 		//			@Override
 		//			public void run() {
-//		frameManager.writeFramesToFile();
-//		getLogger().info("Done.");
+		//		frameManager.writeFramesToFile();
+		//		getLogger().info("Done.");
 		//			}
 		//		});
 	}
