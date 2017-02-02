@@ -2,7 +2,7 @@
 synchronizedStart: false
 
 # This is a (slightly hacky) fix for images which Java interpretes as the wrong image type
-# You should enable this if you get this error when creating a image: http://paste.inventivetalent.org/nokomiquri
+# You should enable this if you get this error when creating a image: "java.lang.IllegalArgumentException: Unknown image type 0"
 fixImageTypes: false
 
 
