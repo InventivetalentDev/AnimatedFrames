@@ -1,6 +1,6 @@
 # AnimatedFrames
 
-[![Build Status](http://ci.inventivetalent.org/job/AnimatedFrames/badge/icon)](https://ci.inventivetalent.org/job/AnimatedFrames/)
+[![Build Status](https://travis-ci.org/InventivetalentDev/AnimatedFrames.svg?branch=master)](https://travis-ci.org/InventivetalentDev/AnimatedFrames)
 
 Play GIFs and display images in Minecraft
 
