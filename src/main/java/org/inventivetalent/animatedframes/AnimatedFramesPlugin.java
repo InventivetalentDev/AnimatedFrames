@@ -30,6 +30,7 @@ package org.inventivetalent.animatedframes;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.inventivetalent.animatedframes.metrics.Metrics;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.config.ConfigValue;
 import org.inventivetalent.update.spiget.SpigetUpdate;
@@ -90,6 +91,8 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 				});
 			}
 		}, 40);
+
+		new Metrics(this);
 
 		spigetUpdate = new SpigetUpdate(this, 5583).setUserAgent("AnimatedFrames/" + getDescription().getVersion()).setVersionComparator(VersionComparator.SEM_VER);
 		spigetUpdate.checkForUpdate(new UpdateCallback() {
