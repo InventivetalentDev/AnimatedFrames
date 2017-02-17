@@ -196,6 +196,17 @@ public class Commands {
 																frame.addViewer(event.getPlayer());
 																sender.sendMessage("  ");
 																sender.sendMessage(MESSAGE_LOADER.getMessage("create.setup.started", "create.setup.started"));
+
+																// Add players in the world
+																Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
+																	@Override
+																	public void run() {
+																		for (Player player : event.getPlayer().getWorld().getPlayers()) {
+																			if (player.getUniqueId().equals(event.getPlayer().getUniqueId())) { continue; }// Skip the creator
+																			frame.addViewer(player);
+																		}
+																	}
+																}, 20);
 															}
 														}, 40);
 													}
