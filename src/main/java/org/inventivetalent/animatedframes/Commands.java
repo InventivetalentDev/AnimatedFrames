@@ -72,7 +72,8 @@ public class Commands {
 			 aliases = {
 					 "af",
 					 "afhelp",
-					 "framehelp" },
+					 "framehelp"
+			 },
 			 usage = "",
 			 max = 0,
 			 fallbackPrefix = "animatedframes")
@@ -109,7 +110,8 @@ public class Commands {
 			 aliases = {
 					 "afcreate",
 					 "createframe",
-					 "afc" },
+					 "afc"
+			 },
 			 usage = "<Name> <Image>",
 			 description = "Create a new image",
 			 min = 2,
@@ -229,7 +231,8 @@ public class Commands {
 					 "afremove",
 					 "removeframe",
 					 "afr",
-					 "afrem", },
+					 "afrem",
+			 },
 			 usage = "<Name>",
 			 description = "Remove an image",
 			 min = 1,
@@ -268,7 +271,8 @@ public class Commands {
 			 aliases = {
 					 "aflist",
 					 "listframes",
-					 "afl" },
+					 "afl"
+			 },
 			 usage = "",
 			 description = "Get a list of frames",
 			 max = 0,
@@ -282,16 +286,108 @@ public class Commands {
 		for (AnimatedFrame frame : frames) {
 			TextComponent component = new TextComponent(frame.getName());
 
+			component.addExtra(new ComponentBuilder(" (" + (frame.isImageLoaded() ? (frame.isPlaying() ? "playing" : "stopped") : "loading") + ")").color(ChatColor.GRAY).create()[0]);
+
 			Vector3DDouble teleportVector = frame.getBaseVector();
 			ClickEvent teleportClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + teleportVector.getX() + " " + teleportVector.getY() + " " + teleportVector.getZ());
 			HoverEvent teleportHover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Teleport to " + teleportVector.getX() + "," + teleportVector.getY() + "," + teleportVector.getZ()).color(ChatColor.GRAY).create());
 			component.addExtra(new ComponentBuilder(" [Teleport]").color(ChatColor.YELLOW).bold(true).event(teleportClick).event(teleportHover).create()[0]);
 
 			ClickEvent deleteClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/frameremove " + frame.getName());
-			component.addExtra(new ComponentBuilder(" [Delete]").color(ChatColor.RED).bold(true).event(deleteClick).create()[0]);
+			component.addExtra(new ComponentBuilder(" [Delete] ").color(ChatColor.RED).event(deleteClick).create()[0]);
+
+			ClickEvent playClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/framestart " + frame.getName());
+			ClickEvent pauseClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/framepause " + frame.getName());
+			component.addExtra(new ComponentBuilder(frame.isPlaying() ? " [❚❚]" : " [►]").color(frame.isPlaying() ? ChatColor.YELLOW : ChatColor.GREEN).event(frame.isPlaying() ? pauseClick : playClick).create()[0]);
+
+			ClickEvent stopClick = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/framestop " + frame.getName());
+			component.addExtra(new ComponentBuilder(" [■]").color(frame.isPlaying() ? ChatColor.RED : ChatColor.GRAY).event(stopClick).create()[0]);
 
 			sender.spigot().sendMessage(component);
 		}
+	}
+
+	@Command(name = "framestart",
+			 aliases = {
+					 "afstart",
+					 "startframe",
+					 "frameresume",
+					 "afresume",
+					 "resumeframe"
+			 },
+			 usage = "<Name>",
+			 description = "Start a stopped/paused frame",
+			 min = 1,
+			 max = 1,
+			 fallbackPrefix = "animatedframes")
+	@Permission("animatedframes.start")
+	public void frameStart(final Player sender, final String name) {
+		if (!plugin.frameManager.doesFrameExist(name)) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("start.error.notFound", "start.error.notFound"));
+			return;
+		}
+		final AnimatedFrame frame = plugin.frameManager.getFrame(name);
+		if (frame.isPlaying()) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("start.error.playing", "start.error.playing"));
+			return;
+		}
+
+		sender.sendMessage(MESSAGE_LOADER.getMessage("start.starting", "start.starting"));
+		frame.setPlaying(true);
+		plugin.frameManager.startFrame(frame);
+	}
+
+	@Command(name = "framepause",
+			 aliases = {
+					 "afpause",
+					 "pauseframe"
+			 },
+			 usage = "<Name>",
+			 description = "Pauses a frame",
+			 min = 1,
+			 max = 1,
+			 fallbackPrefix = "animatedframes")
+	@Permission("animatedframes.pause")
+	public void framePause(final Player sender, final String name) {
+		if (!plugin.frameManager.doesFrameExist(name)) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("pause.error.notFound", "pause.error.notFound"));
+			return;
+		}
+		final AnimatedFrame frame = plugin.frameManager.getFrame(name);
+		if (!frame.isPlaying()) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("pause.error.notPlaying", "pause.error.notPlaying"));
+			return;
+		}
+
+		sender.sendMessage(MESSAGE_LOADER.getMessage("pause.pausing", "pause.pausing"));
+		plugin.frameManager.stopFrame(frame);
+	}
+
+	@Command(name = "framestop",
+			 aliases = {
+					 "afstop",
+					 "stopframe"
+			 },
+			 usage = "<Name>",
+			 description = "Stop a frame",
+			 min = 1,
+			 max = 1,
+			 fallbackPrefix = "animatedframes")
+	@Permission("animatedframes.stop")
+	public void frameStop(final Player sender, final String name) {
+		if (!plugin.frameManager.doesFrameExist(name)) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("stop.error.notFound", "stop.error.notFound"));
+			return;
+		}
+		final AnimatedFrame frame = plugin.frameManager.getFrame(name);
+		if (!frame.isPlaying()) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("stop.error.notPlaying", "stop.error.notPlaying"));
+			return;
+		}
+
+		sender.sendMessage(MESSAGE_LOADER.getMessage("stop.stopping", "stop.stopping"));
+		plugin.frameManager.stopFrame(frame);
+		frame.setCurrentFrame(0);
 	}
 
 	@Command(name = "placeframes",

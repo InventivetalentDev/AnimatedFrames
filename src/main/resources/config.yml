@@ -29,6 +29,21 @@ message:
       removed: "&aFrame removed."
       error:
         notFound: "&cFrame not found"
+    start:
+      starting: "&eStarting animation..."
+      error:
+        notFound: "&cFrame not found"
+        playing: "&cFrame is already playing"
+    stop:
+      stopping: "&Stopping animation..."
+      error:
+        notFound: "&cFrame not found"
+        notPlaying: "&cFrame is not playing"
+    pause:
+      pausing: "&ePausing animation..."
+      error:
+        notFound: "&cFrame not found"
+        notPlaying: "&cFrame is not playing"
     place:
       first: "&ePlease right-click the &abottom-left&e block"
       second: "&ePlease right-click the &atop-right&e block"
