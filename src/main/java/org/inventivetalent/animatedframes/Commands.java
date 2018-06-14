@@ -239,7 +239,7 @@ public class Commands {
 			 max = 1,
 			 fallbackPrefix = "animatedframes")
 	@Permission("animatedframes.remove")
-	public void frameRemove(final Player sender, final String name) {
+	public void frameRemove(final CommandSender sender, final String name) {
 		if (!plugin.frameManager.doesFrameExist(name)) {
 			sender.sendMessage(MESSAGE_LOADER.getMessage("delete.error.notFound", "delete.error.notFound"));
 			return;
@@ -321,7 +321,7 @@ public class Commands {
 			 max = 1,
 			 fallbackPrefix = "animatedframes")
 	@Permission("animatedframes.start")
-	public void frameStart(final Player sender, final String name) {
+	public void frameStart(final CommandSender sender, final String name) {
 		if (!plugin.frameManager.doesFrameExist(name)) {
 			sender.sendMessage(MESSAGE_LOADER.getMessage("start.error.notFound", "start.error.notFound"));
 			return;
@@ -348,7 +348,7 @@ public class Commands {
 			 max = 1,
 			 fallbackPrefix = "animatedframes")
 	@Permission("animatedframes.pause")
-	public void framePause(final Player sender, final String name) {
+	public void framePause(final CommandSender sender, final String name) {
 		if (!plugin.frameManager.doesFrameExist(name)) {
 			sender.sendMessage(MESSAGE_LOADER.getMessage("pause.error.notFound", "pause.error.notFound"));
 			return;
@@ -374,7 +374,7 @@ public class Commands {
 			 max = 1,
 			 fallbackPrefix = "animatedframes")
 	@Permission("animatedframes.stop")
-	public void frameStop(final Player sender, final String name) {
+	public void frameStop(final CommandSender sender, final String name) {
 		if (!plugin.frameManager.doesFrameExist(name)) {
 			sender.sendMessage(MESSAGE_LOADER.getMessage("stop.error.notFound", "stop.error.notFound"));
 			return;
