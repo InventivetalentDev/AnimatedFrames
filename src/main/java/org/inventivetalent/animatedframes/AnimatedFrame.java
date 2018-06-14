@@ -81,10 +81,10 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 
 	@Expose public JsonObject meta = new JsonObject();
 
-	protected int[][] itemFrameIds = NULL_INT_ARRAY;
-	@Expose protected UUID[][] itemFrameUUIDs;
-	private int[] frameDelays = new int[0];
-	private MapWrapper[] mapWrappers;
+	protected         int[][]      itemFrameIds = NULL_INT_ARRAY;
+	@Expose protected UUID[][]     itemFrameUUIDs;
+	private           int[]        frameDelays  = new int[0];
+	private           MapWrapper[] mapWrappers;
 
 	protected int delayTicks = 0;
 
@@ -204,25 +204,7 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 					continue;
 				}
 
-				MultiMapController controller = ((MultiMapController) this.mapWrappers[this.currentFrame].getController());
-				for (Iterator<UUID> iterator = this.worldPlayers.iterator(); iterator.hasNext(); ) {
-					OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(iterator.next());
-					Player player = offlinePlayer != null ? offlinePlayer.getPlayer() : null;
-					if (player != null) {
-						if (player.getWorld().getName().equals(worldName)) {
-							if (player.getLocation().distanceSquared(baseVector.toBukkitLocation(getWorld())) < 1024) {
-								controller.showInFrames(player.getPlayer(), this.itemFrameIds);
-							}
-						}
-					} else {
-						iterator.remove();
-						if (offlinePlayer != null) {
-							for (MapWrapper wrapper : this.mapWrappers) {
-								wrapper.getController().removeViewer(offlinePlayer);
-							}
-						}
-					}
-				}
+				displayCurrentFrame();
 
 				this.currentFrame++;
 				if (this.currentFrame >= this.length) { this.currentFrame = 0; }
@@ -234,6 +216,35 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 			}
 
 		}
+	}
+
+	private void displayCurrentFrame() {
+		MultiMapController controller = ((MultiMapController) this.mapWrappers[this.currentFrame].getController());
+		for (Iterator<UUID> iterator = this.worldPlayers.iterator(); iterator.hasNext(); ) {
+			OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(iterator.next());
+			Player player = offlinePlayer != null ? offlinePlayer.getPlayer() : null;
+			if (player != null) {
+				if (player.getWorld().getName().equals(worldName)) {
+					if (player.getLocation().distanceSquared(baseVector.toBukkitLocation(getWorld())) < 1024) {
+						controller.showInFrames(player.getPlayer(), this.itemFrameIds);
+					}
+				}
+			} else {
+				iterator.remove();
+				if (offlinePlayer != null) {
+					for (MapWrapper wrapper : this.mapWrappers) {
+						wrapper.getController().removeViewer(offlinePlayer);
+					}
+				}
+			}
+		}
+	}
+
+	public void goToFrameAndDisplay(int frame) {
+		if (frame < 0) { throw new IllegalArgumentException("frame must be >= 0"); }
+		if (frame > this.length) { throw new IllegalArgumentException("frame can't be higher than the animation length"); }
+		this.currentFrame = frame;
+		displayCurrentFrame();
 	}
 
 	BufferedImage scaleImage(BufferedImage original) {

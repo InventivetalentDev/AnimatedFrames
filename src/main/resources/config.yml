@@ -44,6 +44,16 @@ message:
       error:
         notFound: "&cFrame not found"
         notPlaying: "&cFrame is not playing"
+    next:
+      success: "&eSkipped to next frame"
+      error:
+        notFound: "&cFrame not found"
+        notPause: "&cFrame is not paused"
+    previous:
+      success: "&eSkipped to previous frame"
+      error:
+        notFound: "&cFrame not found"
+        notPause: "&cFrame is not paused"
     place:
       first: "&ePlease right-click the &abottom-left&e block"
       second: "&ePlease right-click the &atop-right&e block"

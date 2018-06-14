@@ -390,6 +390,69 @@ public class Commands {
 		frame.setCurrentFrame(0);
 	}
 
+	@Command(name = "framenext",
+			 aliases = {
+					 "afnext",
+					 "nextframe"
+			 },
+			 usage = "<Name>",
+			 description = "Go to the next frame of the animation",
+			 min = 1,
+			 max = 1,
+			 fallbackPrefix = "animatedframes")
+	@Permission("animatedframes.nextframe")
+	public void frameNext(final CommandSender sender, final String name) {
+		if (!plugin.frameManager.doesFrameExist(name)) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("next.error.notFound", "next.error.notFound"));
+			return;
+		}
+		final AnimatedFrame frame = plugin.frameManager.getFrame(name);
+		if (frame.isPlaying()) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("next.error.notPaused", "next.error.notPaused"));
+			return;
+		}
+
+		sender.sendMessage(MESSAGE_LOADER.getMessage("next.success", "next.success"));
+
+		if (frame.getCurrentFrame() >= frame.getLength()) {
+			frame.goToFrameAndDisplay(0);
+		} else {
+			frame.goToFrameAndDisplay(frame.getCurrentFrame() + 1);
+		}
+	}
+
+	@Command(name = "frameprevious",
+			 aliases = {
+					 "afprevious",
+					 "previousframe",
+					 "prevframe"
+			 },
+			 usage = "<Name>",
+			 description = "Go to the previous frame of the animation",
+			 min = 1,
+			 max = 1,
+			 fallbackPrefix = "animatedframes")
+	@Permission("animatedframes.previousframe")
+	public void frameprevious(final CommandSender sender, final String name) {
+		if (!plugin.frameManager.doesFrameExist(name)) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("previous.error.notFound", "previous.error.notFound"));
+			return;
+		}
+		final AnimatedFrame frame = plugin.frameManager.getFrame(name);
+		if (frame.isPlaying()) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("previous.error.notPaused", "previous.error.notPaused"));
+			return;
+		}
+
+		sender.sendMessage(MESSAGE_LOADER.getMessage("previous.success", "previous.success"));
+
+		if (frame.getCurrentFrame() <= 0) {
+			frame.goToFrameAndDisplay(frame.getLength() - 1);
+		} else {
+			frame.goToFrameAndDisplay(frame.getCurrentFrame() - 1);
+		}
+	}
+
 	@Command(name = "placeframes",
 			 aliases = {
 					 "afplace",
