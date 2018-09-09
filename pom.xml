@@ -34,7 +34,7 @@
 
     <groupId>org.inventivetalent</groupId>
     <artifactId>animatedframes</artifactId>
-    <version>4.6.0-SNAPSHOT</version>
+    <version>4.7.0-SNAPSHOT</version>
     <name>AnimatedFrames</name>
 
     <build>
@@ -140,12 +140,12 @@
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>mapmanager</artifactId>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>1.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>reflectionhelper</artifactId>
-            <version>LATEST</version>
+            <version>1.14.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
@@ -160,17 +160,12 @@
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>boundingboxapi</artifactId>
-            <version>1.2.3</version>
+            <version>1.3.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>frame-map-util</artifactId>
             <version>[1.0.1,)</version>
-        </dependency>
-        <dependency>
-            <groupId>org.inventivetalent</groupId>
-            <artifactId>particleapi</artifactId>
-            <version>2.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent.spiget-update</groupId>
@@ -206,14 +201,6 @@
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>sk89q-repo</id>
-            <url>http://maven.sk89q.com/artifactory/repo/</url>
-        </repository>
-        <repository>
-            <id>techcable-repo</id>
-            <url>http://repo.techcable.net/content/groups/public/</url>
         </repository>
     </repositories>
 </project>
