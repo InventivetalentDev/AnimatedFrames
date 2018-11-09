@@ -385,6 +385,17 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 		}
 	}
 
+	protected MapWrapper[] getWrappers() {
+		return this.mapWrappers;
+	}
+
+	protected void setContent(MapWrapper[] wrappers, int[] delays) {
+		this.length = wrappers.length;
+		this.frameDelays = delays;
+		this.currentFrame = Math.min(this.currentFrame, this.length - 1);
+		this.mapWrappers = wrappers;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) { return true; }
