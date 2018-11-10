@@ -143,6 +143,9 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 						this.length = 1;
 
 						BufferedImage image = ImageIO.read(file);
+						if (image == null) {
+							throw new RuntimeException("Failed to read the given image. Please make sure you're using a valid source");
+						}
 						image = scaleImage(image);
 						MapWrapper mapWrapper = mapManager.wrapMultiImage(image, this.height, this.width);
 						this.frameDelays = new int[] { 500 };
