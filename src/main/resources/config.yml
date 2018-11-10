@@ -6,6 +6,7 @@ synchronizedStart: false
 fixImageTypes: false
 
 # Maximum distance for frames to be animated to players
+# Note: Increasing this only has an effect if your server's rendering distance for entities is also increased (i.e. spigot.yml entity-tracking-range)
 maxAnimateDistance: 32
 
 message:
