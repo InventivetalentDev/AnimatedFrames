@@ -453,6 +453,31 @@ public class Commands {
 		}
 	}
 
+	@Command(name = "framecontent",
+			 aliases = {
+					 "afcontent"
+			 },
+			 usage = "<Target Name> <Source Name>",
+			 description = "Set the content of a frame to the contents of another",
+			 min = 2,
+			 max = 2,
+			 fallbackPrefix = "animatedframes")
+	@Permission("animatedframes.framecontent")
+	public void framecontent(final CommandSender sender, final String target, final String source) {
+		if (!plugin.frameManager.doesFrameExist(target)) {
+			sender.sendMessage("Target frame not found");
+			return;
+		}
+		if (!plugin.frameManager.doesFrameExist(source)) {
+			sender.sendMessage("Source frame not found");
+			return;
+		}
+		final AnimatedFrame targetFrame = plugin.frameManager.getFrame(target);
+		final AnimatedFrame sourceFrame = plugin.frameManager.getFrame(source);
+
+		targetFrame.setContent(sourceFrame.getWrappers(), sourceFrame.getFrameDelays());
+	}
+
 	@Command(name = "placeframes",
 			 aliases = {
 					 "afplace",

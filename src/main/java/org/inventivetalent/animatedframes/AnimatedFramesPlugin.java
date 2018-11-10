@@ -37,6 +37,7 @@ import org.inventivetalent.update.spiget.SpigetUpdate;
 import org.inventivetalent.update.spiget.UpdateCallback;
 import org.inventivetalent.update.spiget.comparator.VersionComparator;
 
+import java.io.File;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -76,6 +77,9 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 
 		Bukkit.getPluginManager().registerEvents(interactListener = new InteractListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
+
+		File cacheDir = new File(getDataFolder(), "cache");
+		if (!cacheDir.exists()) { cacheDir.mkdirs(); }
 
 		getLogger().fine("Waiting 2 seconds before loading data...");
 		Bukkit.getScheduler().runTaskLaterAsynchronously(this, new Runnable() {

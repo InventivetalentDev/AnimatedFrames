@@ -28,6 +28,7 @@
 
 package org.inventivetalent.animatedframes;
 
+import com.google.common.primitives.Ints;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import lombok.Data;
@@ -42,6 +43,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.inventivetalent.animatedframes.decoder.GifDecoder;
 import org.inventivetalent.frameutil.BaseFrameMapAbstract;
+import org.inventivetalent.mapmanager.ArrayImage;
 import org.inventivetalent.mapmanager.MapManagerPlugin;
 import org.inventivetalent.mapmanager.TimingsHelper;
 import org.inventivetalent.mapmanager.controller.MapController;
@@ -57,6 +59,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -125,36 +128,79 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 		if (!imageLoaded) {
 			MapManager mapManager = ((MapManagerPlugin) Bukkit.getPluginManager().getPlugin("MapManager")).getMapManager();
 			try {
-				File file = plugin.frameManager.downloadOrGetImage(this.imageSource);
-				GifDecoder decoder = new GifDecoder();
-				decoder.read(new FileInputStream(file));
+				File cacheDir = new File(new File(plugin.getDataFolder(), "cache"), this.name);
+				if (!cacheDir.exists()) {
+					cacheDir.mkdirs();
 
-				if ((this.length = decoder.getFrameCount()) <= 0) {
-					plugin.getLogger().info("Animation length for '" + getName() + "' is zero. Creating non-animated image.");
-					this.length = 1;
+					plugin.getLogger().info("Generating image data for " + getName() + "...");
 
-					BufferedImage image = ImageIO.read(file);
-					image = scaleImage(image);
-					MapWrapper mapWrapper = mapManager.wrapMultiImage(image, this.height, this.width);
-					this.frameDelays = new int[] { 500 };
-					this.mapWrappers = new MapWrapper[] { mapWrapper };
-					image.flush();
+					File file = plugin.frameManager.downloadOrGetImage(this.imageSource);
+					GifDecoder decoder = new GifDecoder();
+					decoder.read(new FileInputStream(file));
+
+					if ((this.length = decoder.getFrameCount()) <= 0) {
+						plugin.getLogger().info("Animation length for '" + getName() + "' is zero. Creating non-animated image.");
+						this.length = 1;
+
+						BufferedImage image = ImageIO.read(file);
+						image = scaleImage(image);
+						MapWrapper mapWrapper = mapManager.wrapMultiImage(image, this.height, this.width);
+						this.frameDelays = new int[] { 500 };
+						this.mapWrappers = new MapWrapper[] { mapWrapper };
+						image.flush();
+
+						File cacheFile = new File(cacheDir, this.name + "_0.afc");
+						cacheFile.createNewFile();
+						try (FileOutputStream out = new FileOutputStream(cacheFile)) {
+							ArrayImage.writeToStream(mapWrapper.getContent(), out);
+						}
+					} else {
+						this.frameDelays = new int[this.length];
+						this.mapWrappers = new MapWrapper[this.length];
+						for (int i = 0; i < this.length; i++) {
+							BufferedImage image = scaleImage(decoder.getFrame(i));
+							int delay = decoder.getDelay(i);
+							this.frameDelays[i] = delay;
+							MapWrapper wrapper = mapManager.wrapMultiImage(image, this.height, this.width);
+							this.mapWrappers[i] = wrapper;
+							image.flush();
+
+							File cacheFile = new File(cacheDir, this.name + "_" + i + ".afc");
+							cacheFile.createNewFile();
+							try (FileOutputStream out = new FileOutputStream(cacheFile)) {
+								out.write(Ints.toByteArray(delay));
+								ArrayImage.writeToStream(wrapper.getContent(), out);
+							}
+						}
+					}
+
+					// Reset all images
+					for (Object object : decoder.frames) {
+						((GifDecoder.GifFrame) object).image.flush();
+					}
+					decoder.frames.clear();
+
 				} else {
+					plugin.getLogger().info("Reading " + getName() + " from cache...");
+
+					String[] fileList = cacheDir.list();
+					this.length = fileList.length;
 					this.frameDelays = new int[this.length];
 					this.mapWrappers = new MapWrapper[this.length];
+
 					for (int i = 0; i < this.length; i++) {
-						BufferedImage image = scaleImage(decoder.getFrame(i));
-						this.frameDelays[i] = decoder.getDelay(i);
-						this.mapWrappers[i] = mapManager.wrapMultiImage(image, this.height, this.width);
-						image.flush();
+						File cacheFile = new File(cacheDir, this.name + "_" + i + ".afc");
+						cacheFile.createNewFile();
+						try (FileInputStream in = new FileInputStream(cacheFile)) {
+							byte[] lengthBytes = new byte[4];
+							in.read(lengthBytes, 0, 4);
+							this.frameDelays[i] = Ints.fromByteArray(lengthBytes);
+
+							ArrayImage arrayImage = ArrayImage.readFromStream(in);
+							this.mapWrappers[i]=mapManager.wrapMultiImage(arrayImage, this.height, this.width);
+						}
 					}
 				}
-
-				// Reset all images
-				for (Object object : decoder.frames) {
-					((GifDecoder.GifFrame) object).image.flush();
-				}
-				decoder.frames.clear();
 
 				imageLoaded = true;
 			} catch (IOException e) {
@@ -383,6 +429,17 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 				}
 			}
 		}
+	}
+
+	protected MapWrapper[] getWrappers() {
+		return this.mapWrappers;
+	}
+
+	protected void setContent(MapWrapper[] wrappers, int[] delays) {
+		this.length = wrappers.length;
+		this.frameDelays = delays;
+		this.currentFrame = Math.min(this.currentFrame, this.length - 1);
+		this.mapWrappers = wrappers;
 	}
 
 	@Override
