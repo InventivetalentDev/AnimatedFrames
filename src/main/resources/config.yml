@@ -18,7 +18,7 @@ message:
         complete: "&aSetup complete! &eCreating frame '%s' with image '%s'..."
         loading: "&7Loading image & generating maps..."
         saving: "&7Saving frame data to file..."
-        starting: "&7Starting playback..."
+        starting: "&7Starting playback... (This might take a while - See console for progress)"
         started: "&aAnimation started!"
       error:
         exists: "&cFrame already exists"

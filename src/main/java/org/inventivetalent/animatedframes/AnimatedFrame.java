@@ -158,6 +158,8 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 						this.frameDelays = new int[this.length];
 						this.mapWrappers = new MapWrapper[this.length];
 						for (int i = 0; i < this.length; i++) {
+							plugin.getLogger().info("Generating Frame " + (i + 1) + "/" + this.length + " for " + getName() + "...");
+
 							BufferedImage image = scaleImage(decoder.getFrame(i));
 							int delay = decoder.getDelay(i);
 							this.frameDelays[i] = delay;
@@ -189,6 +191,8 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 					this.mapWrappers = new MapWrapper[this.length];
 
 					for (int i = 0; i < this.length; i++) {
+						plugin.getLogger().info("Reading Frame " + (i + 1) + "/" + this.length + " of " + getName() + "...");
+
 						File cacheFile = new File(cacheDir, this.name + "_" + i + ".afc");
 						cacheFile.createNewFile();
 						try (FileInputStream in = new FileInputStream(cacheFile)) {
@@ -197,7 +201,7 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 							this.frameDelays[i] = Ints.fromByteArray(lengthBytes);
 
 							ArrayImage arrayImage = ArrayImage.readFromStream(in);
-							this.mapWrappers[i]=mapManager.wrapMultiImage(arrayImage, this.height, this.width);
+							this.mapWrappers[i] = mapManager.wrapMultiImage(arrayImage, this.height, this.width);
 						}
 					}
 				}
