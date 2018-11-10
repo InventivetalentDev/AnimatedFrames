@@ -5,6 +5,8 @@ synchronizedStart: false
 # You should enable this if you get this error when creating a image: "java.lang.IllegalArgumentException: Unknown image type 0"
 fixImageTypes: false
 
+# Maximum distance for frames to be animated to players
+maxAnimateDistance: 32
 
 message:
   command:

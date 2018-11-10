@@ -51,9 +51,12 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 	SpigetUpdate spigetUpdate;
 	public boolean updateAvailable;
 
-	@ConfigValue(path = "fixImageTypes")            boolean fixImageTypes     = false;
-	@ConfigValue(path = "synchronizedStart") static boolean synchronizedStart = false;
-	static                                          long    synchronizedTime  = 0;
+	@ConfigValue(path = "fixImageTypes")            boolean fixImageTypes      = false;
+	@ConfigValue(path = "synchronizedStart") static boolean synchronizedStart  = false;
+	@ConfigValue(path = "maxAnimateDistance")       int     maxAnimateDistance = 32;
+	static                                          long    synchronizedTime   = 0;
+
+	int maxAnimateDistanceSquared = 1024;
 
 	@Override
 	public void onEnable() {
@@ -71,6 +74,8 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 		saveDefaultConfig();
 		PluginAnnotations.CONFIG.load(this, this);
 		PluginAnnotations.COMMAND.load(this, new Commands(this));
+
+		maxAnimateDistanceSquared = maxAnimateDistance * maxAnimateDistance;
 
 		frameManager = new FrameManager(this);
 		frameExecutor = Executors.newCachedThreadPool();

@@ -278,7 +278,7 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 			Player player = offlinePlayer != null ? offlinePlayer.getPlayer() : null;
 			if (player != null) {
 				if (player.getWorld().getName().equals(worldName)) {
-					if (player.getLocation().distanceSquared(baseVector.toBukkitLocation(getWorld())) < 1024) {
+					if (player.getLocation().distanceSquared(baseVector.toBukkitLocation(getWorld())) < plugin.maxAnimateDistanceSquared) {
 						controller.showInFrames(player.getPlayer(), this.itemFrameIds);
 					}
 				}
