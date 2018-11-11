@@ -301,9 +301,6 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 	}
 
 	BufferedImage scaleImage(BufferedImage original) {
-		if (original.getWidth() % 128 == 0 && original.getHeight() % 128 == 0) {
-			return original;
-		}
 		int type = original.getType();
 		if (plugin.fixImageTypes) {
 			if (type == 0) {
