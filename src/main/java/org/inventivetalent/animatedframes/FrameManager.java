@@ -144,6 +144,9 @@ public class FrameManager {
 		}
 		File cacheDir = new File(new File(plugin.getDataFolder(), "cache"), frame.getName());
 		if (cacheDir.exists()) {
+			for (File f : cacheDir.listFiles()) {
+				f.delete();
+			}
 			cacheDir.delete();
 		}
 	}
