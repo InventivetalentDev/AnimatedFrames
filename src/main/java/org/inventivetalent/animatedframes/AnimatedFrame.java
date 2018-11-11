@@ -155,6 +155,7 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 						File cacheFile = new File(cacheDir, this.name + "_0.afc");
 						cacheFile.createNewFile();
 						try (FileOutputStream out = new FileOutputStream(cacheFile)) {
+							out.write(Ints.toByteArray(500));
 							ArrayImage.writeToStream(mapWrapper.getContent(), out);
 						}
 					} else {
