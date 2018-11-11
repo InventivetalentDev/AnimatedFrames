@@ -142,6 +142,10 @@ public class FrameManager {
 		if (imageFile != null && imageFile.exists()) {
 			imageFile.delete();
 		}
+		File cacheDir = new File(new File(plugin.getDataFolder(), "cache"), frame.getName());
+		if (cacheDir.exists()) {
+			cacheDir.delete();
+		}
 	}
 
 	public boolean downloadImage(String source) {
