@@ -386,20 +386,22 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 					if (Minecraft.VERSION.olderThan(Minecraft.Version.v1_8_R2)) {
 						entities = world.getEntitiesByClass(ItemFrame.class);
 					} else {
-						entities = world.getNearbyEntities(baseVector.toBukkitLocation(world), width, height, width);
+						int size = Math.max(width, height);
+						entities = world.getNearbyEntities(baseVector.toBukkitLocation(world), size, size, size);
 					}
 					for (Entity entity : entities) {
 						if (entity instanceof ItemFrame) {
 							if (boundingBox.expand(0.1).contains(new Vector3DDouble(entity.getLocation()))) {
-								for (int y = 0; y < getBlockHeight(); y++) {
+								for (int y1 = 0; y1 < getBlockHeight(); y1++) {
 									for (int x1 = 0; x1 < getBlockWidth(); x1++) {
-										int x = facing.isFrameModInverted() ? (getBlockWidth() - 1 - x1) : x1;
-										Vector3DDouble vector3d = facing.getPlane().to3D(startVector.add(x, y), baseVector.getX(), baseVector.getZ());
+										int x = facing.isHorizontalModInverted() ? (getBlockWidth() - 1 - x1) : x1;
+										int y = facing.isVerticalModInverted() ? (getBlockHeight() - 1 - y1) : y1;
+										Vector3DDouble vector3d = facing.getPlane().to3D(startVector.add(x, y), baseVector.getX(), baseVector.getZ(), baseVector.getY());
 										if (entity.getLocation().getBlockZ() == vector3d.getZ().intValue()) {
 											if (entity.getLocation().getBlockX() == vector3d.getX().intValue()) {
 												if (entity.getLocation().getBlockY() == vector3d.getY().intValue()) {
-													itemFrameIds[x1][y] = entity.getEntityId();
-													itemFrameUUIDs[x1][y] = entity.getUniqueId();
+													itemFrameIds[x1][y1] = entity.getEntityId();
+													itemFrameUUIDs[x1][y1] = entity.getUniqueId();
 
 													entity.setMetadata("ANIMATED_FRAMES_META", new FixedMetadataValue(plugin, AnimatedFrame.this));
 												}
