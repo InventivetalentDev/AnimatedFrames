@@ -9,6 +9,9 @@ fixImageTypes: false
 # Note: Increasing this only has an effect if your server's rendering distance for entities is also increased (i.e. spigot.yml entity-tracking-range)
 maxAnimateDistance: 32
 
+# (ms) Default delay for GIFs with missing delay information (Time for each frame to be displayed)
+defaultDelay: 50
+
 message:
   command:
     create:

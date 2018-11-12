@@ -54,6 +54,7 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 	@ConfigValue(path = "fixImageTypes")            boolean fixImageTypes      = false;
 	@ConfigValue(path = "synchronizedStart") static boolean synchronizedStart  = false;
 	@ConfigValue(path = "maxAnimateDistance")       int     maxAnimateDistance = 32;
+	@ConfigValue(path = "defaultDelay")             int     defaultDelay       = 50;
 	static                                          long    synchronizedTime   = 0;
 
 	int maxAnimateDistanceSquared = 1024;

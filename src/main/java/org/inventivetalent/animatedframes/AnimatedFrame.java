@@ -167,6 +167,10 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 
 							BufferedImage image = scaleImage(decoder.getFrame(i));
 							int delay = decoder.getDelay(i);
+							if (delay == 0) {
+								plugin.getLogger().warning("Frame has no delay information, falling back to default (" + plugin.defaultDelay + ")");
+								delay = plugin.defaultDelay;
+							}
 							this.frameDelays[i] = delay;
 							MapWrapper wrapper = mapManager.wrapMultiImage(image, this.height, this.width);
 							this.mapWrappers[i] = wrapper;
