@@ -50,6 +50,7 @@ import org.inventivetalent.mapmanager.controller.MapController;
 import org.inventivetalent.mapmanager.controller.MultiMapController;
 import org.inventivetalent.mapmanager.manager.MapManager;
 import org.inventivetalent.mapmanager.wrapper.MapWrapper;
+import org.inventivetalent.mapmanager.wrapper.MultiWrapper;
 import org.inventivetalent.reflection.minecraft.Minecraft;
 import org.inventivetalent.vectors.d2.Vector2DDouble;
 import org.inventivetalent.vectors.d3.Vector3DDouble;
@@ -156,7 +157,7 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 						cacheFile.createNewFile();
 						try (FileOutputStream out = new FileOutputStream(cacheFile)) {
 							out.write(Ints.toByteArray(500));
-							ArrayImage.writeToStream(mapWrapper.getContent(), out);
+							ArrayImage.writeMultiToSream(((MultiWrapper) mapWrapper).getMultiContent(), out);
 						}
 					} else {
 						this.frameDelays = new int[this.length];
@@ -175,7 +176,7 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 							cacheFile.createNewFile();
 							try (FileOutputStream out = new FileOutputStream(cacheFile)) {
 								out.write(Ints.toByteArray(delay));
-								ArrayImage.writeToStream(wrapper.getContent(), out);
+								ArrayImage.writeMultiToSream(((MultiWrapper) wrapper).getMultiContent(), out);
 							}
 						}
 					}
@@ -204,8 +205,8 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 							in.read(lengthBytes, 0, 4);
 							this.frameDelays[i] = Ints.fromByteArray(lengthBytes);
 
-							ArrayImage arrayImage = ArrayImage.readFromStream(in);
-							this.mapWrappers[i] = mapManager.wrapMultiImage(arrayImage, this.height, this.width);
+							ArrayImage[][] images = ArrayImage.readMultiFromStream(in);
+							this.mapWrappers[i] = mapManager.wrapMultiImage(images);
 						}
 					}
 				}
@@ -394,7 +395,7 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 									for (int y1 = 0; y1 < getBlockHeight(); y1++) {
 										for (int x1 = 0; x1 < getBlockWidth(); x1++) {
 											int x = facing.isHorizontalModInverted() ? (getBlockWidth() - 1 - x1) : x1;
-											int y = facing.isVerticalModInverted()? (getBlockHeight() - 1 - y1) : y1;
+											int y = facing.isVerticalModInverted() ? (getBlockHeight() - 1 - y1) : y1;
 											Vector3DDouble vector3d = facing.getPlane().to3D(startVector.add(x, y), baseVector.getX(), baseVector.getZ(), baseVector.getY());
 											if (entity.getLocation().getBlockZ() == vector3d.getZ().intValue()) {
 												if (entity.getLocation().getBlockX() == vector3d.getX().intValue()) {
