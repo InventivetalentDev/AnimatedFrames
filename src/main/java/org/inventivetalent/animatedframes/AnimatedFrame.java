@@ -211,6 +211,8 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 
 							ArrayImage[][] images = ArrayImage.readMultiFromStream(in);
 							this.mapWrappers[i] = mapManager.wrapMultiImage(images);
+						} catch (IOException readE) {
+							throw new RuntimeException("Your cached frame data appears to be invalid. Please delete the plugins/AnimatedFrames/cache directory and restart your server", readE);
 						}
 					}
 				}
