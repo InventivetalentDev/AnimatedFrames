@@ -104,7 +104,7 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 
 		new Metrics(this);
 
-		spigetUpdate = new SpigetUpdate(this, 5583).setUserAgent("AnimatedFrames/" + getDescription().getVersion()).setVersionComparator(VersionComparator.SEM_VER);
+		spigetUpdate = new SpigetUpdate(this, 5583).setUserAgent("AnimatedFrames/" + getDescription().getVersion()).setVersionComparator(VersionComparator.SEM_VER_SNAPSHOT);
 		spigetUpdate.checkForUpdate(new UpdateCallback() {
 			@Override
 			public void updateAvailable(String s, String s1, boolean b) {
