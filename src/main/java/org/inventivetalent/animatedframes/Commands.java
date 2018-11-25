@@ -43,9 +43,12 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.inventivetalent.animatedframes.clickable.CursorPosition;
+import org.inventivetalent.mapmanager.event.MapInteractEvent;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.command.Command;
 import org.inventivetalent.pluginannotations.command.Completion;
+import org.inventivetalent.pluginannotations.command.JoinedArg;
 import org.inventivetalent.pluginannotations.command.Permission;
 import org.inventivetalent.pluginannotations.message.MessageFormatter;
 import org.inventivetalent.pluginannotations.message.MessageLoader;
@@ -55,7 +58,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class Commands {
@@ -476,6 +481,113 @@ public class Commands {
 		final AnimatedFrame sourceFrame = plugin.frameManager.getFrame(source);
 
 		targetFrame.setContent(sourceFrame.getWrappers(), sourceFrame.getFrameDelays());
+	}
+
+
+	@Command(name = "frameclickadd",
+			 aliases = {
+					 "afaddclick"
+			 },
+			 usage = "<Name> <Action>",
+			 description = "Adds a click event with the specified action to a frame",
+			 min = 2,
+			 fallbackPrefix = "animatedframes")
+	@Permission("animatedframes.click.add")
+	public void frameClickAdd(final Player sender, final String name, final @JoinedArg String action) {
+		if (!plugin.frameManager.doesFrameExist(name)) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("click.error.notFound", "click.error.notFound"));
+			return;
+		}
+		AnimatedFrame frame = plugin.frameManager.getFrame(name);
+
+
+		sender.sendMessage("  ");
+		sender.sendMessage(MESSAGE_LOADER.getMessage("click.setup.first", "click.setup.first"));
+		plugin.interactListener.listenForMapInteract(sender, new Callback<MapInteractEvent>() {
+			@Override
+			public void call(MapInteractEvent event) {
+				if (event != null) {
+					CursorPosition.CursorMapQueryResult firstPos = CursorPosition.findMenuByCursor(event.getPlayer(), Collections.singleton(frame));
+					if(firstPos!=null&&firstPos.isFound()) {
+						sender.sendMessage(MESSAGE_LOADER.getMessage("click.setup.set.first", "click.setup.set.first"));
+						sender.sendMessage("  ");
+
+						Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+							@Override
+							public void run() {
+								sender.sendMessage(MESSAGE_LOADER.getMessage("click.setup.second", "click.setup.second"));
+								plugin.interactListener.listenForMapInteract(sender, new Callback<MapInteractEvent>() {
+									@Override
+									public void call(final MapInteractEvent event) {
+										if (event != null ) {
+											CursorPosition.CursorMapQueryResult secondPos = CursorPosition.findMenuByCursor(event.getPlayer(), Collections.singleton(frame));
+											if(secondPos!=null&&secondPos.isFound()) {
+												sender.sendMessage(MESSAGE_LOADER.getMessage("click.setup.set.second", "click.setup.set.second"));
+												sender.sendMessage("  ");
+
+												frame.clickEvents.add(new org.inventivetalent.animatedframes.clickable.ClickEvent(firstPos.getPosition().toVector(), secondPos.getPosition().toVector(), action));
+												plugin.frameManager.writeToFile(frame);
+												plugin.frameManager.writeIndexToFile();
+
+												sender.sendMessage(MESSAGE_LOADER.getMessage("click.setup.complete", "click.setup.complete", new MessageFormatter() {
+													@Override
+													public String format(String key, String message) {
+														return String.format(message, action);
+													}
+												}));
+												sender.sendMessage("  ");
+											}
+
+										}
+									}
+								});
+							}
+						}, 10);
+					}
+				}
+			}
+		});
+	}
+
+	@Command(name = "frameclickremove",
+			 aliases = {
+					 "afremoveclick"
+			 },
+			 usage = "<Name>",
+			 description = "Removes a click event",
+			 min = 1,
+			 max = 1,
+			 fallbackPrefix = "animatedframes")
+	@Permission("animatedframes.click.remove")
+	public void frameClickRemove(final Player sender, final String name) {
+		if (!plugin.frameManager.doesFrameExist(name)) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("click.error.notFound", "click.error.notFound"));
+			return;
+		}
+		AnimatedFrame frame = plugin.frameManager.getFrame(name);
+
+
+		sender.sendMessage("  ");
+		sender.sendMessage(MESSAGE_LOADER.getMessage("click.remove", "click.remove"));
+		plugin.interactListener.listenForMapInteract(sender, new Callback<MapInteractEvent>() {
+			@Override
+			public void call(MapInteractEvent event) {
+				if (event != null) {
+					CursorPosition.CursorMapQueryResult pos = CursorPosition.findMenuByCursor(event.getPlayer(), Collections.singleton(frame));
+					if(pos!=null&&pos.isFound()) {
+						Optional<org.inventivetalent.animatedframes.clickable.ClickEvent> ev=frame.clickEvents.stream().filter(e->e.contains(pos.getPosition().getX(),pos.getPosition().getY())).findFirst();
+						if(ev.isPresent()) {
+							frame.clickEvents.remove(ev.get());
+							plugin.frameManager.writeToFile(frame);
+							plugin.frameManager.writeIndexToFile();
+
+							sender.sendMessage(MESSAGE_LOADER.getMessage("click.removed", "click.removed"));
+							sender.sendMessage("  ");
+						}
+					}
+				}
+			}
+		});
 	}
 
 	@Command(name = "placeframes",

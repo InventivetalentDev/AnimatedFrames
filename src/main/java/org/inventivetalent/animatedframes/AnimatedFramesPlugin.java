@@ -30,6 +30,7 @@ package org.inventivetalent.animatedframes;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.inventivetalent.animatedframes.clickable.ClickListener;
 import org.inventivetalent.animatedframes.metrics.Metrics;
 import org.inventivetalent.pluginannotations.PluginAnnotations;
 import org.inventivetalent.pluginannotations.config.ConfigValue;
@@ -83,6 +84,7 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 
 		Bukkit.getPluginManager().registerEvents(interactListener = new InteractListener(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new ClickListener(this), this);
 
 		File cacheDir = new File(getDataFolder(), "cache");
 		if (!cacheDir.exists()) { cacheDir.mkdirs(); }
