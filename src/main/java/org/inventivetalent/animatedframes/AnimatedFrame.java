@@ -41,6 +41,9 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.inventivetalent.animatedframes.clickable.ClickEvent;
+import org.inventivetalent.animatedframes.clickable.Clickable;
+import org.inventivetalent.animatedframes.clickable.CursorPosition;
 import org.inventivetalent.animatedframes.decoder.GifDecoder;
 import org.inventivetalent.frameutil.BaseFrameMapAbstract;
 import org.inventivetalent.mapmanager.ArrayImage;
@@ -69,7 +72,7 @@ import java.util.logging.Level;
 @Data
 @ToString(doNotUseGetters = true,
 		  callSuper = true)
-public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
+public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable, Clickable {
 
 	static final int[][] NULL_INT_ARRAY = new int[0][0];
 
@@ -84,6 +87,8 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 	@Expose public UUID creator;
 
 	@Expose public JsonObject meta = new JsonObject();
+
+	@Expose public Set<ClickEvent> clickEvents = new HashSet<>();
 
 	protected         int[][]      itemFrameIds = NULL_INT_ARRAY;
 	@Expose protected UUID[][]     itemFrameUUIDs;
@@ -456,6 +461,16 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable {
 		this.frameDelays = delays;
 		this.currentFrame = Math.min(this.currentFrame, this.length - 1);
 		this.mapWrappers = wrappers;
+	}
+
+	@Override
+	public boolean isClickable() {
+		return !this.clickEvents.isEmpty();
+	}
+
+	@Override
+	public void handleClick(Player player, CursorPosition position, int action) {
+		this.clickEvents.stream().filter(e -> e.contains(position.x, position.y)).forEach(e -> e.executeFor(player));
 	}
 
 	@Override

@@ -60,6 +60,18 @@ message:
       error:
         notFound: "&cFrame not found"
         notPause: "&cFrame is not paused"
+    click:
+      setup:
+        first: "&ePlease right-click the &abottom-left corner &eof the frame"
+        second: "&ePlease right-click the &atop-right corner &eof the frame"
+        set:
+          first: "&aFirst corner set"
+          second: "&aSecond corner set"
+        complete: "&aAdded click event %s"
+      remove: "&ePlease click inside the action you want to remove"
+      removed: "&eAction removed"
+      error:
+        notFound: "&cFrame not found"
     place:
       first: "&ePlease right-click the &abottom-left&e block"
       second: "&ePlease right-click the &atop-right&e block"

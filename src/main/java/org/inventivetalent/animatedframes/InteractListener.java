@@ -45,6 +45,7 @@ public class InteractListener implements Listener {
 	private AnimatedFramesPlugin plugin;
 
 	private final Map<UUID, Callback<PlayerInteractEntityEvent>> entityInteractMap = new HashMap<>();
+	private final Map<UUID, Callback<MapInteractEvent>> mapInteractMap = new HashMap<>();
 	private final Map<UUID, Callback<PlayerInteractEvent>>       interactMap       = new HashMap<>();
 
 	public InteractListener(AnimatedFramesPlugin plugin) {
@@ -55,6 +56,20 @@ public class InteractListener implements Listener {
 	public void on(final MapInteractEvent event) {
 		if (event.getItemFrame().hasMetadata("ANIMATED_FRAMES_META")) {
 			event.setCancelled(true);
+
+			Callback<MapInteractEvent> callback;
+			while ((callback = mapInteractMap.remove(event.getPlayer().getUniqueId())) != null)
+				callback.call(event);
+		}
+	}
+
+
+	public void listenForMapInteract(Player player, Callback<MapInteractEvent> callback) {
+		if (callback == null) { return; }
+		if (player != null) {
+			mapInteractMap.put(player.getUniqueId(), callback);
+		} else {
+			callback.call(null);
 		}
 	}
 
@@ -93,5 +108,7 @@ public class InteractListener implements Listener {
 			callback.call(null);
 		}
 	}
+
+
 
 }
