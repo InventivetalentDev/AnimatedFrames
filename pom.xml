@@ -160,12 +160,12 @@
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>boundingboxapi</artifactId>
-            <version>1.3.1-SNAPSHOT</version>
+            <version>1.3.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>frame-map-util</artifactId>
-            <version>1.2.0-SNAPSHOT</version>
+            <version>1.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent.spiget-update</groupId>
