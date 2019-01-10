@@ -40,7 +40,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.plugin.Plugin;
 import org.inventivetalent.animatedframes.clickable.ClickEvent;
 import org.inventivetalent.animatedframes.clickable.Clickable;
 import org.inventivetalent.animatedframes.clickable.CursorPosition;
@@ -376,7 +375,6 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable, Cli
 	}
 
 	public void refreshFrames() {
-		final Plugin plugin = Bukkit.getPluginManager().getPlugin("AnimatedFrames");
 		if (!plugin.isEnabled()) { return; }
 		Bukkit.getScheduler().runTask(plugin, new Runnable() {
 			@Override
@@ -470,7 +468,7 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable, Cli
 
 	@Override
 	public void handleClick(Player player, CursorPosition position, int action) {
-		this.clickEvents.stream().filter(e -> e.contains(position.x, position.y)).forEach(e -> e.executeFor(player));
+		this.clickEvents.stream().filter(e -> e.contains(position.x, position.y)).forEach(e -> e.executeFor(player,this.plugin));
 	}
 
 	@Override

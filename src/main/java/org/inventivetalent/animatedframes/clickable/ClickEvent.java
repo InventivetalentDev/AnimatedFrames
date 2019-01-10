@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import lombok.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.inventivetalent.vectors.Vectors;
 import org.inventivetalent.vectors.d2.Vector2DInt;
 
@@ -33,9 +34,9 @@ public class ClickEvent {
 		return x > this.min.getX() && y > this.min.getY() && x < this.max.getX() && y < this.max.getY();
 	}
 
-	public void executeFor(Player player) {
+	public void executeFor(Player player, Plugin plugin) {
 		//TODO: might want to add more action types
-		Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("AnimatedFrames"),()->{
+		Bukkit.getScheduler().runTask(plugin,()->{
 			player.performCommand(this.action);
 		});
 	}
