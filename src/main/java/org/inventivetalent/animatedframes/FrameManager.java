@@ -242,11 +242,16 @@ public class FrameManager {
 		try {
 			File saveFile = new File(saveDirectory, URLEncoder.encode(frame.getName(), "UTF-8") + ".afd");
 			if (!saveFile.exists()) { saveFile.createNewFile(); }
-			try {
-				Bukkit.getPluginManager().callEvent(new FrameSaveEvent(frame, saveFile));
-			} catch (Throwable throwable) {
-				plugin.getLogger().log(Level.WARNING, "Unhandled exception in FrameSaveEvent for '" + frame.getName() + "'", throwable);
-			}
+			Bukkit.getScheduler().runTask(plugin, new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Bukkit.getPluginManager().callEvent(new FrameSaveEvent(frame, saveFile));
+					} catch (Throwable throwable) {
+						plugin.getLogger().log(Level.WARNING, "Unhandled exception in FrameSaveEvent for '" + frame.getName() + "'", throwable);
+					}
+				}
+			});
 			try (Writer writer = new FileWriter(saveFile)) {
 				GSON.toJson(frame, writer);
 			}
