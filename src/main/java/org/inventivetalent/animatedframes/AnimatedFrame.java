@@ -130,156 +130,160 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable, Cli
 
 	@Override
 	public void run() {
-		if (!imageLoaded) {
-			MapManager mapManager = ((MapManagerPlugin) Bukkit.getPluginManager().getPlugin("MapManager")).getMapManager();
-			try {
-				File cacheDir = new File(new File(plugin.getDataFolder(), "cache"), this.name);
-				if (!cacheDir.exists()) {
-					cacheDir.mkdirs();
+		try {
+			if (!imageLoaded) {
+				MapManager mapManager = ((MapManagerPlugin) Bukkit.getPluginManager().getPlugin("MapManager")).getMapManager();
+				try {
+					File cacheDir = new File(new File(plugin.getDataFolder(), "cache"), this.name);
+					if (!cacheDir.exists()) {
+						cacheDir.mkdirs();
 
-					plugin.getLogger().info("Generating image data for " + getName() + "...");
+						plugin.getLogger().info("Generating image data for " + getName() + "...");
 
-					File file = plugin.frameManager.downloadOrGetImage(this.imageSource);
-					GifDecoder decoder = new GifDecoder();
-					decoder.read(new FileInputStream(file));
+						File file = plugin.frameManager.downloadOrGetImage(this.imageSource);
+						GifDecoder decoder = new GifDecoder();
+						decoder.read(new FileInputStream(file));
 
-					if ((this.length = decoder.getFrameCount()) <= 0) {
-						plugin.getLogger().info("Animation length for '" + getName() + "' is zero. Creating non-animated image.");
-						this.length = 1;
+						if ((this.length = decoder.getFrameCount()) <= 0) {
+							plugin.getLogger().info("Animation length for '" + getName() + "' is zero. Creating non-animated image.");
+							this.length = 1;
 
-						BufferedImage image = ImageIO.read(file);
-						if (image == null) {
-							throw new RuntimeException("Failed to read the given image. Please make sure you're using a valid source");
+							BufferedImage image = ImageIO.read(file);
+							if (image == null) {
+								throw new RuntimeException("Failed to read the given image. Please make sure you're using a valid source");
+							}
+							image = scaleImage(image);
+							MapWrapper mapWrapper = mapManager.wrapMultiImage(image, this.height, this.width);
+							this.frameDelays = new int[] { 500 };
+							this.mapWrappers = new MapWrapper[] { mapWrapper };
+							image.flush();
+
+							File cacheFile = new File(cacheDir, this.name + "_0.afc");
+							cacheFile.createNewFile();
+							try (FileOutputStream out = new FileOutputStream(cacheFile)) {
+								out.write(Ints.toByteArray(500));
+								ArrayImage.writeMultiToSream(((MultiWrapper) mapWrapper).getMultiContent(), out);
+							}
+						} else {
+							this.frameDelays = new int[this.length];
+							this.mapWrappers = new MapWrapper[this.length];
+							for (int i = 0; i < this.length; i++) {
+								plugin.getLogger().info("Generating Frame " + (i + 1) + "/" + this.length + " for " + getName() + "...");
+
+								BufferedImage image = scaleImage(decoder.getFrame(i));
+								int delay = decoder.getDelay(i);
+								if (delay == 0) {
+									plugin.getLogger().warning("Frame has no delay information, falling back to default (" + plugin.defaultDelay + ")");
+									delay = plugin.defaultDelay;
+								}
+								this.frameDelays[i] = delay;
+								MapWrapper wrapper = mapManager.wrapMultiImage(image, this.height, this.width);
+								this.mapWrappers[i] = wrapper;
+								image.flush();
+
+								File cacheFile = new File(cacheDir, this.name + "_" + i + ".afc");
+								cacheFile.createNewFile();
+								try (FileOutputStream out = new FileOutputStream(cacheFile)) {
+									out.write(Ints.toByteArray(delay));
+									ArrayImage.writeMultiToSream(((MultiWrapper) wrapper).getMultiContent(), out);
+								}
+							}
 						}
-						image = scaleImage(image);
-						MapWrapper mapWrapper = mapManager.wrapMultiImage(image, this.height, this.width);
-						this.frameDelays = new int[] { 500 };
-						this.mapWrappers = new MapWrapper[] { mapWrapper };
-						image.flush();
 
-						File cacheFile = new File(cacheDir, this.name + "_0.afc");
-						cacheFile.createNewFile();
-						try (FileOutputStream out = new FileOutputStream(cacheFile)) {
-							out.write(Ints.toByteArray(500));
-							ArrayImage.writeMultiToSream(((MultiWrapper) mapWrapper).getMultiContent(), out);
+						// Reset all images
+						for (Object object : decoder.frames) {
+							((GifDecoder.GifFrame) object).image.flush();
 						}
+						decoder.frames.clear();
+
 					} else {
+						plugin.getLogger().info("Reading " + getName() + " from cache...");
+
+						String[] fileList = cacheDir.list();
+						this.length = fileList.length;
 						this.frameDelays = new int[this.length];
 						this.mapWrappers = new MapWrapper[this.length];
-						for (int i = 0; i < this.length; i++) {
-							plugin.getLogger().info("Generating Frame " + (i + 1) + "/" + this.length + " for " + getName() + "...");
 
-							BufferedImage image = scaleImage(decoder.getFrame(i));
-							int delay = decoder.getDelay(i);
-							if (delay == 0) {
-								plugin.getLogger().warning("Frame has no delay information, falling back to default (" + plugin.defaultDelay + ")");
-								delay = plugin.defaultDelay;
-							}
-							this.frameDelays[i] = delay;
-							MapWrapper wrapper = mapManager.wrapMultiImage(image, this.height, this.width);
-							this.mapWrappers[i] = wrapper;
-							image.flush();
+						for (int i = 0; i < this.length; i++) {
+							plugin.getLogger().info("Reading Frame " + (i + 1) + "/" + this.length + " of " + getName() + "...");
 
 							File cacheFile = new File(cacheDir, this.name + "_" + i + ".afc");
 							cacheFile.createNewFile();
-							try (FileOutputStream out = new FileOutputStream(cacheFile)) {
-								out.write(Ints.toByteArray(delay));
-								ArrayImage.writeMultiToSream(((MultiWrapper) wrapper).getMultiContent(), out);
+							try (FileInputStream in = new FileInputStream(cacheFile)) {
+								byte[] lengthBytes = new byte[4];
+								in.read(lengthBytes, 0, 4);
+								this.frameDelays[i] = Ints.fromByteArray(lengthBytes);
+
+								ArrayImage[][] images = ArrayImage.readMultiFromStream(in);
+								this.mapWrappers[i] = mapManager.wrapMultiImage(images);
+							} catch (IOException readE) {
+								throw new RuntimeException("Your cached frame data appears to be invalid. Please delete the plugins/AnimatedFrames/cache directory and restart your server", readE);
 							}
 						}
 					}
 
-					// Reset all images
-					for (Object object : decoder.frames) {
-						((GifDecoder.GifFrame) object).image.flush();
-					}
-					decoder.frames.clear();
-
-				} else {
-					plugin.getLogger().info("Reading " + getName() + " from cache...");
-
-					String[] fileList = cacheDir.list();
-					this.length = fileList.length;
-					this.frameDelays = new int[this.length];
-					this.mapWrappers = new MapWrapper[this.length];
-
-					for (int i = 0; i < this.length; i++) {
-						plugin.getLogger().info("Reading Frame " + (i + 1) + "/" + this.length + " of " + getName() + "...");
-
-						File cacheFile = new File(cacheDir, this.name + "_" + i + ".afc");
-						cacheFile.createNewFile();
-						try (FileInputStream in = new FileInputStream(cacheFile)) {
-							byte[] lengthBytes = new byte[4];
-							in.read(lengthBytes, 0, 4);
-							this.frameDelays[i] = Ints.fromByteArray(lengthBytes);
-
-							ArrayImage[][] images = ArrayImage.readMultiFromStream(in);
-							this.mapWrappers[i] = mapManager.wrapMultiImage(images);
-						} catch (IOException readE) {
-							throw new RuntimeException("Your cached frame data appears to be invalid. Please delete the plugins/AnimatedFrames/cache directory and restart your server", readE);
-						}
-					}
+					imageLoaded = true;
+				} catch (IOException e) {
+					plugin.getLogger().log(Level.SEVERE, "Failed to load image '" + getName() + "'", e);
+					throw new RuntimeException("Failed to load image");
 				}
-
-				imageLoaded = true;
-			} catch (IOException e) {
-				plugin.getLogger().log(Level.SEVERE, "Failed to load image '" + getName() + "'", e);
-				throw new RuntimeException("Failed to load image");
 			}
-		}
 
-		while (!this.playing) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				plugin.getLogger().warning("playing-delay for '" + getName() + "' has been interrupted");
-				return;
-			}
-		}
-
-		if (AnimatedFramesPlugin.synchronizedStart) {
-			while (System.currentTimeMillis() < AnimatedFramesPlugin.synchronizedTime) {
+			while (!this.playing) {
 				try {
-					Thread.sleep(1);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					plugin.getLogger().warning("synchronized start delay for '" + getName() + "' has been interrupted");
+					plugin.getLogger().warning("playing-delay for '" + getName() + "' has been interrupted");
 					return;
 				}
 			}
-		}
 
-		while (this.playing && this.plugin.isEnabled()) {
-			if (startCallback != null) {
-				startCallback.call(null);
-				startCallback = null;
-			}
-
-			if (timeSinceLastRefresh++ > 10000) {
-				timeSinceLastRefresh = 0;
-				refresh();
-			}
-			if (delayTicks++ >= this.frameDelays[this.currentFrame]) {
-				delayTicks = 0;
-				if (Bukkit.getOnlinePlayers().isEmpty()) {
+			if (AnimatedFramesPlugin.synchronizedStart) {
+				while (System.currentTimeMillis() < AnimatedFramesPlugin.synchronizedTime) {
 					try {
-						Thread.sleep(2000);
+						Thread.sleep(1);
 					} catch (InterruptedException e) {
-						plugin.getLogger().warning("Animation thread for " + getName() + " interrupted");
+						plugin.getLogger().warning("synchronized start delay for '" + getName() + "' has been interrupted");
+						return;
 					}
-					continue;
+				}
+			}
+
+			while (this.playing && this.plugin.isEnabled()) {
+				if (startCallback != null) {
+					startCallback.call(null);
+					startCallback = null;
 				}
 
-				displayCurrentFrame();
+				if (timeSinceLastRefresh++ > 10000) {
+					timeSinceLastRefresh = 0;
+					refresh();
+				}
+				if (delayTicks++ >= this.frameDelays[this.currentFrame]) {
+					delayTicks = 0;
+					if (Bukkit.getOnlinePlayers().isEmpty()) {
+						try {
+							Thread.sleep(2000);
+						} catch (InterruptedException e) {
+							plugin.getLogger().warning("Animation thread for " + getName() + " interrupted");
+						}
+						continue;
+					}
 
-				this.currentFrame++;
-				if (this.currentFrame >= this.length) { this.currentFrame = 0; }
-			}
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				plugin.getLogger().log(Level.WARNING, "Frame interrupted", e);
-			}
+					displayCurrentFrame();
 
+					this.currentFrame++;
+					if (this.currentFrame >= this.length) { this.currentFrame = 0; }
+				}
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					plugin.getLogger().log(Level.WARNING, "Frame interrupted", e);
+				}
+
+			}
+		} catch (Throwable e) {
+			throw new RuntimeException("Unexpected exception in AnimatedFrame " + name, e);
 		}
 	}
 
@@ -468,7 +472,7 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable, Cli
 
 	@Override
 	public void handleClick(Player player, CursorPosition position, int action) {
-		this.clickEvents.stream().filter(e -> e.contains(position.x, position.y)).forEach(e -> e.executeFor(player,this.plugin));
+		this.clickEvents.stream().filter(e -> e.contains(position.x, position.y)).forEach(e -> e.executeFor(player, this.plugin));
 	}
 
 	@Override
