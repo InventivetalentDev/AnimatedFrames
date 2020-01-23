@@ -386,7 +386,7 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable, Cli
 				TimingsHelper.startTiming("AnimatedFrames - [" + getName() + "] refreshItemFrames");
 
 				final World world = getWorld();
-				if (world.getPlayers().isEmpty()) {
+				if (world == null || world.getPlayers().isEmpty()) {
 					itemFrameIds = NULL_INT_ARRAY;
 				} else {
 					itemFrameIds = new int[width][height];
