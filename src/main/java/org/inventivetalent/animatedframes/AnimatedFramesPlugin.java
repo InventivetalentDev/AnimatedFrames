@@ -52,11 +52,12 @@ public class AnimatedFramesPlugin extends JavaPlugin {
 	SpigetUpdate spigetUpdate;
 	public boolean updateAvailable;
 
-	@ConfigValue(path = "fixImageTypes")            boolean fixImageTypes      = false;
-	@ConfigValue(path = "synchronizedStart") static boolean synchronizedStart  = false;
-	@ConfigValue(path = "maxAnimateDistance")       int     maxAnimateDistance = 32;
-	@ConfigValue(path = "defaultDelay")             int     defaultDelay       = 50;
-	static                                          long    synchronizedTime   = 0;
+	@ConfigValue(path = "fixImageTypes")            boolean fixImageTypes           = false;
+	@ConfigValue(path = "synchronizedStart") static boolean synchronizedStart       = false;
+	@ConfigValue(path = "doNotStartAutomatically")  boolean doNotStartAutomatically = false;
+	@ConfigValue(path = "maxAnimateDistance")       int     maxAnimateDistance      = 32;
+	@ConfigValue(path = "defaultDelay")             int     defaultDelay            = 50;
+	static                                          long    synchronizedTime        = 0;
 
 	int maxAnimateDistanceSquared = 1024;
 

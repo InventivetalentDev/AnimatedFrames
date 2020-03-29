@@ -362,8 +362,10 @@ public class FrameManager {
 				}
 			};
 			loadedFrame.refresh();
-			startFrame(loadedFrame);
-			loadedFrame.setPlaying(true);
+			if (!plugin.doNotStartAutomatically) {
+				startFrame(loadedFrame);
+				loadedFrame.setPlaying(true);
+			}
 		}
 
 //		TimingsHelper.stopTiming("AnimatedFrames - readFromFile");
