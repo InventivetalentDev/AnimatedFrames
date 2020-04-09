@@ -140,7 +140,7 @@
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>mapmanager</artifactId>
-            <version>1.7.4-SNAPSHOT</version>
+            <version>1.7.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
