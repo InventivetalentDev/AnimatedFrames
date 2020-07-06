@@ -149,6 +149,14 @@ public class FrameManager {
 			}
 			cacheDir.delete();
 		}
+		try {
+			File saveFile = new File(saveDirectory, URLEncoder.encode(frame.getName(), "UTF-8") + ".afd");
+			saveFile.delete();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		writeIndexToFile();
 	}
 
 	public boolean downloadImage(String source) {
