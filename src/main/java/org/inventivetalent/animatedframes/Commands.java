@@ -342,6 +342,33 @@ public class Commands {
 		plugin.frameManager.startFrame(frame);
 	}
 
+	@Command(name = "framestart-all",
+			aliases = {
+			"afstart-all",
+			"startframe-all",
+			"frameresume-all",
+			"afresume-all",
+			"resumeframe-all"
+			},
+			description = "Start all stopped/paused frames",
+			fallbackPrefix = "animatedframes")
+	@Permission("animatedframes.start.all")
+	public void frameStartAll(final CommandSender sender) {
+		if (plugin.frameManager.getFrames().size() == 0) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("start.all.error.empty", "start.all.error.empty"));
+			return;
+		}
+		for (final AnimatedFrame frame : plugin.frameManager.getFrames()) {
+			if (frame.isPlaying()) {
+				sender.sendMessage(MESSAGE_LOADER.getMessage("start.all.error.playing", "start.all.error.playing").replaceAll("%name%", frame.getName()));
+				continue;
+			}
+			sender.sendMessage(MESSAGE_LOADER.getMessage("start.all.starting", "start.all.starting").replaceAll("%name%", frame.getName()));
+			frame.setPlaying(true);
+			plugin.frameManager.startFrame(frame);
+		}
+	}
+
 	@Command(name = "framepause",
 			 aliases = {
 					 "afpause",
@@ -366,6 +393,29 @@ public class Commands {
 
 		sender.sendMessage(MESSAGE_LOADER.getMessage("pause.pausing", "pause.pausing"));
 		plugin.frameManager.stopFrame(frame);
+	}
+
+	@Command(name = "framepause-all",
+			aliases = {
+					"afpause-all",
+					"pauseframe-all"
+			},
+			description = "Pauses all started frames",
+			fallbackPrefix = "animatedframes")
+	@Permission("animatedframes.pause.all")
+	public void framePauseAll(final CommandSender sender) {
+		if (plugin.frameManager.getFrames().size() == 0) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("pause.all.error.empty", "pause.all.error.empty"));
+			return;
+		}
+		for (final AnimatedFrame frame : plugin.frameManager.getFrames()) {
+			if (!frame.isPlaying()) {
+				sender.sendMessage(MESSAGE_LOADER.getMessage("pause.all.error.notPlaying", "pause.all.error.notPlaying").replaceAll("%name%", frame.getName()));
+				continue;
+			}
+			sender.sendMessage(MESSAGE_LOADER.getMessage("pause.all.pausing", "pause.all.pausing").replaceAll("%name%", frame.getName()));
+			plugin.frameManager.stopFrame(frame);
+		}
 	}
 
 	@Command(name = "framestop",
@@ -393,6 +443,30 @@ public class Commands {
 		sender.sendMessage(MESSAGE_LOADER.getMessage("stop.stopping", "stop.stopping"));
 		plugin.frameManager.stopFrame(frame);
 		frame.setCurrentFrame(0);
+	}
+
+	@Command(name = "framestop-all",
+			aliases = {
+					"afstop-all",
+					"stopframe-all"
+			},
+			description = "Stop all started frames",
+			fallbackPrefix = "animatedframes")
+	@Permission("animatedframes.stop.all")
+	public void frameStopAll(final CommandSender sender) {
+		if (plugin.frameManager.getFrames().size() == 0) {
+			sender.sendMessage(MESSAGE_LOADER.getMessage("stop.all.error.empty", "stop.all.error.empty"));
+			return;
+		}
+		for (final AnimatedFrame frame : plugin.frameManager.getFrames()) {
+			if (!frame.isPlaying()) {
+				sender.sendMessage(MESSAGE_LOADER.getMessage("stop.all.error.notPlaying", "stop.all.error.notPlaying").replaceAll("%name%", frame.getName()));
+				continue;
+			}
+			sender.sendMessage(MESSAGE_LOADER.getMessage("stop.all.stopping", "stop.all.stopping").replaceAll("%name%", frame.getName()));
+			plugin.frameManager.stopFrame(frame);
+			frame.setCurrentFrame(0);
+		}
 	}
 
 	@Command(name = "framenext",

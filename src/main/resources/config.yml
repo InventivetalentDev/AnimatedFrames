@@ -43,16 +43,31 @@ message:
       error:
         notFound: "&cFrame not found"
         playing: "&cFrame is already playing"
+      all:
+        starting: "&eStarting animation of &f%name%&e..."
+        error:
+          empty: "&cNo frames found to start!"
+          playing: "&cFrame &f%name% &cis already playing"
     stop:
-      stopping: "&Stopping animation..."
+      stopping: "&eStopping animation..."
       error:
         notFound: "&cFrame not found"
         notPlaying: "&cFrame is not playing"
+      all:
+        stopping: "&eStopping animation of &f%name%&e..."
+        error:
+          empty: "&cNo frames found to stop!"
+          notPlaying: "&cFrame &f%name% &cis not playing"
     pause:
       pausing: "&ePausing animation..."
       error:
         notFound: "&cFrame not found"
         notPlaying: "&cFrame is not playing"
+      all:
+        pausing: "&ePausing animation of &f%name%&e..."
+        error:
+          empty: "&cNo frames found to pause!"
+          notPlaying: "&cFrame &f%name% &cis not playing"
     next:
       success: "&eSkipped to next frame"
       error:
