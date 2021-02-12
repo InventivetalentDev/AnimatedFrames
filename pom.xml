@@ -34,8 +34,14 @@
 
     <groupId>org.inventivetalent</groupId>
     <artifactId>animatedframes</artifactId>
-    <version>4.12.1-SNAPSHOT</version>
+    <version>4.13.0-SNAPSHOT</version>
     <name>AnimatedFrames</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.9</maven.compiler.source>
+        <maven.compiler.target>1.9</maven.compiler.target>
+    </properties>
 
     <build>
         <finalName>AnimatedFrames_v${project.version}</finalName>
@@ -59,16 +65,16 @@
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>1.9</source>
+                    <target>1.9</target>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4</version>
+                <version>3.2.2</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -140,12 +146,12 @@
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>mapmanager</artifactId>
-            <version>1.7.10-SNAPSHOT</version>
+            <version>1.8.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>pluginannotations</artifactId>
-            <version>1.4.7-SNAPSHOT</version>
+            <version>1.5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
@@ -160,7 +166,7 @@
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>frame-map-util</artifactId>
-            <version>1.2.3-SNAPSHOT</version>
+            <version>1.3.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent.spiget-update</groupId>
@@ -171,12 +177,12 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.8</version>
+            <version>1.18.16</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.6.2</version>
+            <version>2.8.5</version>
         </dependency>
     </dependencies>
 
@@ -184,6 +190,10 @@
         <repository>
             <id>inventive-repo</id>
             <url>https://repo.inventivetalent.org/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
         <repository>
             <id>md_5-repo</id>
