@@ -58,10 +58,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class Commands {
 
@@ -286,7 +283,7 @@ public class Commands {
 	public void frameList(final Player sender) {
 		sender.sendMessage("  ");
 
-		Set<AnimatedFrame> frames = plugin.frameManager.getFrames();
+		Collection<AnimatedFrame> frames = plugin.frameManager.getFrames();
 		sender.sendMessage("§eFrames (" + frames.size() + "): ");
 		for (AnimatedFrame frame : frames) {
 			TextComponent component = new TextComponent(frame.getName());
