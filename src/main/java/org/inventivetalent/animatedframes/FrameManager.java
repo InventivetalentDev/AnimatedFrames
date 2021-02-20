@@ -222,8 +222,13 @@ public class FrameManager {
 	}
 
 	@Synchronized
-	public Collection<AnimatedFrame> getFrames() {
-		return frameMap.values();
+	public Set<AnimatedFrame> getFrames() {
+		return new HashSet<>(frameMap.values());
+	}
+
+	@Synchronized
+	public List<AnimatedFrame> getSortedFrames() {
+		return new ArrayList<>(frameMap.values());
 	}
 
 	@Synchronized

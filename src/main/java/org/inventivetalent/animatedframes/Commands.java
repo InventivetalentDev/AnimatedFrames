@@ -283,7 +283,7 @@ public class Commands {
 	public void frameList(final Player sender) {
 		sender.sendMessage("  ");
 
-		Collection<AnimatedFrame> frames = plugin.frameManager.getFrames();
+		List<AnimatedFrame> frames = plugin.frameManager.getSortedFrames();
 		sender.sendMessage("§eFrames (" + frames.size() + "): ");
 		for (AnimatedFrame frame : frames) {
 			TextComponent component = new TextComponent(frame.getName());
