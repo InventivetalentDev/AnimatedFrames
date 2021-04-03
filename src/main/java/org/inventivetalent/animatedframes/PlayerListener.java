@@ -33,86 +33,105 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.*;
 import org.inventivetalent.update.spiget.UpdateCallback;
 
 public class PlayerListener implements Listener {
 
-	private AnimatedFramesPlugin plugin;
+    private AnimatedFramesPlugin plugin;
 
-	public PlayerListener(AnimatedFramesPlugin plugin) {
-		this.plugin = plugin;
-	}
+    public PlayerListener(AnimatedFramesPlugin plugin) {
+        this.plugin = plugin;
+    }
 
-	@EventHandler
-	public void on(final PlayerJoinEvent event) {
-		Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
-			@Override
-			public void run() {
-				for (AnimatedFrame frame : plugin.frameManager.getFrames()) {
-					frame.addViewer(event.getPlayer());
-				}
-			}
-		}, 20);
+    @EventHandler
+    public void on(final PlayerJoinEvent event) {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                for (AnimatedFrame frame : plugin.frameManager.getFrames()) {
+                    frame.addViewer(event.getPlayer());
+                }
+            }
+        }, 20);
 
-		if (event.getPlayer().hasPermission("animatedframes.updatecheck")) {
-			plugin.spigetUpdate.checkForUpdate(new UpdateCallback() {
-				@Override
-				public void updateAvailable(String s, String s1, boolean b) {
-					plugin.updateAvailable = true;
-					event.getPlayer().sendMessage("§aA new version for §6AnimatedFrames §ais available (§7v" + s + "§a). Download it from https://r.spiget.org/5583");
-				}
+        if (event.getPlayer().hasPermission("animatedframes.updatecheck")) {
+            plugin.spigetUpdate.checkForUpdate(new UpdateCallback() {
+                @Override
+                public void updateAvailable(String s, String s1, boolean b) {
+                    plugin.updateAvailable = true;
+                    event.getPlayer().sendMessage("§aA new version for §6AnimatedFrames §ais available (§7v" + s + "§a). Download it from https://r.spiget.org/5583");
+                }
 
-				@Override
-				public void upToDate() {
-				}
-			});
-		}
-	}
+                @Override
+                public void upToDate() {
+                }
+            });
+        }
+    }
 
-	@EventHandler
-	public void on(PlayerQuitEvent event) {
-		for (AnimatedFrame frame : plugin.frameManager.getFrames()) {
-			frame.removeViewer(event.getPlayer());
-		}
-	}
+    @EventHandler
+    public void on(PlayerQuitEvent event) {
+        for (AnimatedFrame frame : plugin.frameManager.getFrames()) {
+            frame.removeViewer(event.getPlayer());
+        }
+    }
 
-	@EventHandler
-	public void on(final PlayerChangedWorldEvent event) {
-		for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(event.getFrom().getName())) {
-			frame.removeViewer(event.getPlayer());
-		}
-		final String newWorld = event.getPlayer().getWorld().getName();
-		Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
-			@Override
-			public void run() {
-				for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(newWorld)) {
-					frame.addViewer(event.getPlayer());
-				}
-			}
-		}, 20);
-	}
+    @EventHandler
+    public void on(final PlayerChangedWorldEvent event) {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+            for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(event.getFrom().getName())) {
+                frame.removeViewer(event.getPlayer());
+            }
+        }, 10);
+        final String newWorld = event.getPlayer().getWorld().getName();
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+            for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(newWorld)) {
+                frame.addViewer(event.getPlayer());
+            }
+        }, 40);
+    }
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void on(PlayerDeathEvent event) {
-		for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(event.getEntity().getWorld().getName())) {
-			frame.removeViewer(event.getEntity());
-		}
-	}
+    @EventHandler
+    public void on(final PlayerTeleportEvent event) {
+        boolean update;
+        if (!event.getFrom().getWorld().getUID().equals(event.getTo().getWorld().getUID())) {
+            update = true;
+        } else {
+            double distance = event.getFrom().distanceSquared(event.getTo());
+            update = distance > 500;
+        }
+        if (update) {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+                for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(event.getFrom().getWorld().getName())) {
+                    frame.removeViewer(event.getPlayer());
+                }
+            }, 10);
+            final String newWorld = event.getPlayer().getWorld().getName();
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+                for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(newWorld)) {
+                    frame.addViewer(event.getPlayer());
+                }
+            }, 40);
+        }
+    }
 
-	@EventHandler
-	public void on(final PlayerRespawnEvent event) {
-		Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
-			@Override
-			public void run() {
-				for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(event.getPlayer().getWorld().getName())) {
-					frame.addViewer(event.getPlayer());
-				}
-			}
-		}, 20);
-	}
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void on(PlayerDeathEvent event) {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+            for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(event.getEntity().getWorld().getName())) {
+                frame.removeViewer(event.getEntity());
+            }
+        }, 10);
+    }
+
+    @EventHandler
+    public void on(final PlayerRespawnEvent event) {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+            for (AnimatedFrame frame : plugin.frameManager.getFramesInWorld(event.getPlayer().getWorld().getName())) {
+                frame.addViewer(event.getPlayer());
+            }
+        }, 40);
+    }
 
 }
