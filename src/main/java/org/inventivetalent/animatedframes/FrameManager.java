@@ -49,10 +49,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.file.Files;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
@@ -227,6 +224,11 @@ public class FrameManager {
 	@Synchronized
 	public Set<AnimatedFrame> getFrames() {
 		return new HashSet<>(frameMap.values());
+	}
+
+	@Synchronized
+	public List<AnimatedFrame> getSortedFrames() {
+		return new ArrayList<>(frameMap.values());
 	}
 
 	@Synchronized
