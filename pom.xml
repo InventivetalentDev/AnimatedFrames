@@ -6,13 +6,13 @@
 
     <groupId>org.inventivetalent</groupId>
     <artifactId>animatedframes</artifactId>
-    <version>4.13.1-SNAPSHOT</version>
+    <version>4.13.2-SNAPSHOT</version>
     <name>AnimatedFrames</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.9</maven.compiler.source>
-        <maven.compiler.target>1.9</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <build>
@@ -113,27 +113,27 @@
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>mapmanager</artifactId>
-            <version>1.8.1-SNAPSHOT</version>
+            <version>1.8.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>pluginannotations</artifactId>
-            <version>1.5.0-SNAPSHOT</version>
+            <version>1.5.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>vectors</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>boundingboxapi</artifactId>
-            <version>1.3.5-SNAPSHOT</version>
+            <version>1.3.6-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>frame-map-util</artifactId>
-            <version>1.3.1-SNAPSHOT</version>
+            <version>1.3.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent.spiget-update</groupId>
@@ -144,7 +144,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.16</version>
+            <version>1.18.20</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
