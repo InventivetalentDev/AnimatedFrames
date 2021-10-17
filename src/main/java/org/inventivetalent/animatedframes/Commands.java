@@ -38,7 +38,6 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -58,7 +57,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 public class Commands {
 
@@ -151,7 +152,7 @@ public class Commands {
 		plugin.interactListener.listenForEntityInteract(sender, new Callback<PlayerInteractEntityEvent>() {
 			@Override
 			public void call(PlayerInteractEntityEvent event) {
-				if (event != null && event.getRightClicked().getType() == EntityType.ITEM_FRAME) {
+				if (event != null && event.getRightClicked() instanceof ItemFrame) {
 					final ItemFrame firstFrame = (ItemFrame) event.getRightClicked();
 					sender.sendMessage(MESSAGE_LOADER.getMessage("create.setup.set.first", "create.setup.set.first"));
 					sender.sendMessage("  ");
@@ -163,7 +164,7 @@ public class Commands {
 							plugin.interactListener.listenForEntityInteract(sender, new Callback<PlayerInteractEntityEvent>() {
 								@Override
 								public void call(final PlayerInteractEntityEvent event) {
-									if (event != null && event.getRightClicked().getType() == EntityType.ITEM_FRAME) {
+									if (event != null && event.getRightClicked() instanceof ItemFrame) {
 										final ItemFrame secondFrame = (ItemFrame) event.getRightClicked();
 										sender.sendMessage(MESSAGE_LOADER.getMessage("create.setup.set.second", "create.setup.set.second"));
 										sender.sendMessage("  ");

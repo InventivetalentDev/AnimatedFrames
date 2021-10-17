@@ -28,7 +28,7 @@
 
 package org.inventivetalent.animatedframes;
 
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -75,7 +75,7 @@ public class InteractListener implements Listener {
 
 	@EventHandler
 	public void on(PlayerInteractEntityEvent event) {
-		if (event.getRightClicked().getType() == EntityType.ITEM_FRAME) {
+		if (event.getRightClicked() instanceof ItemFrame) {
 			Callback<PlayerInteractEntityEvent> callback;
 			while ((callback = entityInteractMap.remove(event.getPlayer().getUniqueId())) != null)
 				callback.call(event);
