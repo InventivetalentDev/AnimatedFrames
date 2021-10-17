@@ -7,7 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.inventivetalent.animatedframes.AnimatedFrame;
@@ -53,7 +52,7 @@ public class CursorPosition {
 		List<BoundingBox> boundingBoxes = new ArrayList<>();
 		for (Iterator<Entity> iterator = entities.iterator(); iterator.hasNext(); ) {
 			Entity entity = iterator.next();
-			if (entity.getType() != EntityType.ITEM_FRAME) {
+			if (!(entity instanceof ItemFrame)) {
 				iterator.remove(); // Filter non-ItemFrame entities
 				continue;
 			}
