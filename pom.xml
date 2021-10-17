@@ -6,7 +6,7 @@
 
     <groupId>org.inventivetalent</groupId>
     <artifactId>animatedframes</artifactId>
-    <version>4.13.2-SNAPSHOT</version>
+    <version>4.13.3-SNAPSHOT</version>
     <name>AnimatedFrames</name>
 
     <properties>
