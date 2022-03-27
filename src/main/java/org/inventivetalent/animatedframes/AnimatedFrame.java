@@ -295,7 +295,12 @@ public class AnimatedFrame extends BaseFrameMapAbstract implements Runnable, Cli
 			if (player != null) {
 				if (player.getWorld().getName().equals(worldName)) {
 					if (player.getLocation().distanceSquared(baseVector.toBukkitLocation(getWorld())) < plugin.maxAnimateDistanceSquared) {
-						controller.showInFrames(player.getPlayer(), this.itemFrameIds);
+						controller.showInFrames(player.getPlayer(), this.itemFrameIds, new MultiMapController.DebugCallable() {
+							@Override
+							public String call(MapController mapController, int i, int i1) { //TODO: remove
+								return mapController.getMapId(player.getPlayer()) + " " + i + " " + i1;
+							}
+						});
 					}
 				}
 			} else {
