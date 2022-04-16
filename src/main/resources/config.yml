@@ -65,11 +65,11 @@ message:
         notPause: "&cFrame is not paused"
     click:
       setup:
-        first: "&ePlease right-click the &abottom-left corner &eof the frame"
-        second: "&ePlease right-click the &atop-right corner &eof the frame"
+        first: "&ePlease right-click the &abottom-left corner &eof the click area"
+        second: "&ePlease right-click the &atop-right corner &eof the click area"
         set:
-          first: "&aFirst corner set"
-          second: "&aSecond corner set"
+          first: "&aFirst position set"
+          second: "&aSecond position set"
         complete: "&aAdded click event %s"
       remove: "&ePlease click inside the action you want to remove"
       removed: "&eAction removed"
