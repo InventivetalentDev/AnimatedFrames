@@ -6,7 +6,7 @@
 
     <groupId>org.inventivetalent</groupId>
     <artifactId>animatedframes</artifactId>
-    <version>4.13.4-SNAPSHOT</version>
+    <version>4.13.5-SNAPSHOT</version>
     <name>AnimatedFrames</name>
 
     <properties>
@@ -138,7 +138,7 @@
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>frame-map-util</artifactId>
-            <version>1.3.4-SNAPSHOT</version>
+            <version>1.3.5-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent.spiget-update</groupId>
