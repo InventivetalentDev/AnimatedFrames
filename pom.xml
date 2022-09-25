@@ -118,7 +118,7 @@
         <dependency>
             <groupId>org.inventivetalent</groupId>
             <artifactId>mapmanager</artifactId>
-            <version>1.8.6-SNAPSHOT</version>
+            <version>1.8.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.inventivetalent</groupId>
