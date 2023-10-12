@@ -21,7 +21,7 @@ AnimatedFrames is a Minecraft plugin that allows you to play GIFs and display im
 ## Quick Start 
 
 1. **Installation** 
-    - Download the latest release from [here](https://download.inventivetalent.org/gh/AnimatedFrames/4.13.5-SNAPSHOT). 
+    - Download the latest release from [here](https://download.inventivetalent.org/gh/AnimatedFrames/latest). 
 
 2. **Usage** 
     - To create a GIF or image use the `/afcreate <name> <url>` command. 
